@@ -1,0 +1,65 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
+
+
+class DragLabel(QLabel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setPixmap(QPixmap("image.png").scaledToWidth(100))
+        self.setGeometry(50, 50, 100, 100)
+        self.setScaledContents(True)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_start_position = event.pos()
+
+    def mouseMoveEvent(self, event):
+        if not (event.buttons() & Qt.LeftButton):
+            return
+        if (event.pos() - self.drag_start_position).manhattanLength() < QApplication.startDragDistance():
+            return
+
+        drag = QDrag(self)
+        mimedata = QMimeData()
+        mimedata.setText("Label")
+        drag.setMimeData(mimedata)
+        pixmap = QPixmap(self.size())
+        self.render(pixmap)
+        drag.setPixmap(pixmap)
+        drag.setHotSpot(event.pos() - self.rect().topLeft())
+        drop_action = drag.exec_(Qt.MoveAction)
+
+class DragDropWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setAcceptDrops(True)
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Drag and Drop')
+        self.setGeometry(100, 100, 300, 300)
+
+        label = DragLabel(self)
+        label.show()
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasText():
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasText():
+            event.setDropAction(Qt.MoveAction)
+            event.accept()
+        else:
+            event.ignore()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = DragDropWidget()
+    ex.show()
+    sys.exit(app.exec_())
