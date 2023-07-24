@@ -1,0 +1,56 @@
+import xlwt
+from pdfminer.pdfparser import PDFParser
+from pdfminer.pdfdocument import PDFDocument
+from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfpage import PDFTextExtractionNotAllowed
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfdevice import PDFDevice
+from pdfminer.layout import LAParams, LTTextBoxHorizontal
+from pdfminer.converter import PDFPageAggregator
+
+# Mở file PDF
+fp = open('path/to/your/file.pdf', 'rb')
+
+# Tạo đối tượng PDFParser
+parser = PDFParser(fp)
+
+# Tạo đối tượng PDFDocument
+document = PDFDocument(parser)
+
+# Kiểm tra nếu file không cho phép trích xuất văn bản
+if not document.is_extractable:
+    raise PDFTextExtractionNotAllowed
+
+# Khởi tạo các đối tượng liên quan đến trích xuất văn bản
+rsrcmgr = PDFResourceManager()
+laparams = LAParams()
+device = PDFPageAggregator(rsrcmgr, laparams=laparams)
+interpreter = PDFPageInterpreter(rsrcmgr, device)
+
+# Khởi tạo file Excel để lưu thông tin
+workbook = xlwt.Workbook()
+sheet = workbook.add_sheet('Sheet 1')
+row = 0
+sheet.write(row, 0, 'Số quyết định')
+sheet.write(row, 1, 'Ngày quyết định')
+row += 1
+
+# Duyệt qua các trang trong file PDF và trích xuất văn bản
+for page in PDFPage.create_pages(document):
+    interpreter.process_page(page)
+    layout = device.get_result()
+    for element in layout:
+        if isinstance(element, LTTextBoxHorizontal):
+            # Lấy thông tin số quyết định và ngày quyết định
+            text = element.get_text().strip()
+            if 'Số quyết định:' in text:
+                so_qd = text.split('Số quyết định:')[1].strip()
+                ngay_qd = text.split('Ngày quyết định:')[1].split('Số quyết định:')[0].strip()
+
+                # Lưu thông tin vào file Excel
+                sheet.write(row, 0, so_qd)
+                sheet.write(row, 1, ngay_qd)
+                row += 1
+
+# Lưu file Excel
+workbook.save('path/to/your/file.xls')
