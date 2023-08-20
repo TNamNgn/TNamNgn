@@ -1,0 +1,45 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton
+
+class ABC2Unicode(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        abc_label = QLabel('ABC String')
+        self.abc_input = QLineEdit()
+
+        unicode_label = QLabel('Unicode String')
+        self.unicode_output = QLineEdit()
+
+        convert_button = QPushButton('Convert')
+        convert_button.clicked.connect(self.convert)
+
+        hbox1 = QHBoxLayout()
+        hbox1.addWidget(abc_label)
+        hbox1.addWidget(self.abc_input)
+
+        hbox2 = QHBoxLayout()
+        hbox2.addWidget(unicode_label)
+        hbox2.addWidget(self.unicode_output)
+
+        vbox = QVBoxLayout()
+        vbox.addLayout(hbox1)
+        vbox.addLayout(hbox2)
+        vbox.addWidget(convert_button)
+
+        self.setLayout(vbox)
+        self.setWindowTitle('ABC to Unicode')
+
+    def convert(self):
+        abc_string = self.abc_input.text()
+        unicode_string = unidecode(abc_string)
+        self.unicode_output.setText(unicode_string)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = ABC2Unicode()
+    ex.show()
+    sys.exit(app.exec_())
