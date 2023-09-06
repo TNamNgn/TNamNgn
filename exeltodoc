@@ -1,0 +1,27 @@
+from docx import Document
+
+# Đọc dữ liệu từ tệp Excel và lưu vào một danh sách
+import pandas as pd
+
+data = pd.read_excel('du_lieu.xlsx')
+
+# Tạo tệp báo cáo .docx
+doc = Document()
+
+# Điền thông tin vào báo cáo
+doc.add_heading('Báo Cáo Tên Hồ Sơ', 0)
+
+for index, row in data.iterrows():
+    # Lấy thông tin từ cột Excel và gán vào báo cáo
+    ten_ho_so = row['Tên Hồ Sơ']
+    
+    # Tạo đoạn văn bản và thêm nội dung vào nó
+    p = doc.add_paragraph(f'Tên hồ sơ: {ten_ho_so}')
+    
+    # Điều chỉnh định dạng văn bản nếu cần
+    # p.bold = True  # Đặt văn bản là đậm
+    # p.italic = True  # Đặt văn bản là nghiêng
+    # p.underline = True  # Đặt văn bản là gạch chân
+
+# Lưu báo cáo vào tệp
+doc.save('bao_cao.docx')
