@@ -1,0 +1,636 @@
+<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="Display.aspx.vb" Inherits="MDNCDC.Display" %>
+<%@ Register TagPrefix="asp" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit"%>
+<asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+    <style type="text/css">
+        .NewsTab
+        {
+            margin-top: 0px;
+        }
+    </style>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <br />
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+        <ContentTemplate>
+            Chọn phiếu:
+            <asp:DropDownList ID="drDeAn" runat="server" 
+        DataTextField="KHLT" DataValueField="KHLT" AutoPostBack="True">
+            </asp:DropDownList>
+            <br />
+            <asp:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0" 
+                AutoPostBack="True" CssClass="NewsTab" EnableTheming="False" Height="477px" 
+                ScrollBars="Auto" Width="800px">
+                <asp:TabPanel ID="TabPanel8" runat="server" HeaderText="Thông tin chung">
+                    <ContentTemplate>
+                        <br />
+                        <asp:DetailsView ID="dtvMain" runat="server" AutoGenerateRows="False" 
+                            CssClass="visoft__tab_xpie7" DataKeyNames="KHLT" DataSourceID="SqlDataMain0" 
+                            EnableModelValidation="True" Height="50px" Width="781px">
+                            <Fields>
+                                <asp:BoundField DataField="KHLT" HeaderText="Ký hiệu lưu trữ" ReadOnly="True" 
+                                    SortExpression="KHLT" />
+                                <asp:BoundField DataField="Tenbaocao" HeaderText="Tên báo cáo" 
+                                    SortExpression="Tenbaocao" />
+                                <asp:BoundField DataField="Chubien" HeaderText="Chủ biên" 
+                                    SortExpression="Chubien" />
+                                <asp:BoundField DataField="Donvithuchien" HeaderText="Đơn vị thực hiện" 
+                                    SortExpression="Donvithuchien" />
+                                <asp:BoundField DataField="namnopluutru" HeaderText="Năm nộp lưu trữ" 
+                                    SortExpression="namnopluutru" />
+                                <asp:BoundField DataField="thoigianthicong" HeaderText="Thời gian thi công" 
+                                    SortExpression="thoigianthicong" />
+                                <asp:BoundField DataField="nguonvonthuchien" HeaderText="Nguồn vốn thực hiện" 
+                                    SortExpression="nguonvonthuchien" />
+                                <asp:BoundField DataField="tongvondautu" HeaderText="Tổng vốn đầu tư" 
+                                    SortExpression="tongvondautu" />
+                                <asp:BoundField DataField="vitrihanhchinh" HeaderText="Vị trí hành chính" 
+                                    SortExpression="vitrihanhchinh" />
+                                <asp:BoundField DataField="mucdodieutra" HeaderText="Mức độ điều tra" 
+                                    SortExpression="mucdodieutra" />
+                                <asp:BoundField DataField="nhomnhiemvudieutra" 
+                                    HeaderText="Nhóm nhiệm vụ điều tra" SortExpression="nhomnhiemvudieutra" />
+                                <asp:BoundField DataField="doituongdieutra" HeaderText="Đối tượng điều tra" 
+                                    SortExpression="doituongdieutra" />
+                                <asp:BoundField DataField="Dientichtoandean" HeaderText="Diện tích toàn đề án" 
+                                    SortExpression="Dientichtoandean" />
+                                <asp:BoundField DataField="Soluongbanve" HeaderText="Số lượng bản vẽ" 
+                                    SortExpression="Soluongbanve" />
+                            </Fields>
+                        </asp:DetailsView>
+                    </ContentTemplate>
+                </asp:TabPanel>
+                <asp:TabPanel ID="TabPanel3" runat="server" HeaderText="TabPanel3">
+                    <HeaderTemplate>
+                        KL chủ yếu
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <br />
+                        <br />
+                        <asp:GridView ID="grdKLTC" runat="server" AllowPaging="True" 
+                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="ID_KLTC" 
+                            DataSourceID="SqlDataKLTC" 
+                            EmptyDataText="There are no data records to display." 
+                            EnableModelValidation="True" Width="786px">
+                            <Columns>
+                                <asp:BoundField DataField="HangmucCT" HeaderText="Hạng mục" 
+                                    SortExpression="HangmucCT" />
+                                <asp:BoundField DataField="Donvitinh" HeaderText="Đơn vị tính" 
+                                    SortExpression="Donvitinh" />
+                                <asp:BoundField DataField="Khongluong" HeaderText="Khối lượng" 
+                                    SortExpression="Khongluong" />
+                            </Columns>
+                        </asp:GridView>
+                    </ContentTemplate>
+                </asp:TabPanel>
+                <asp:TabPanel ID="TabPanel4" runat="server" HeaderText="Bản vẽ chung">
+                    <HeaderTemplate>
+                        DT chung
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <br />
+                        <br />
+                        <table class="style1">
+                            <tr>
+                                <td class="style2">
+                                    <strong>Danh sách</strong></td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style2">
+                                    <asp:ListBox ID="lstBVChung" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataBVChung" DataTextField="Banve" DataValueField="ID_BV" 
+                                        Rows="10" Width="265px"></asp:ListBox>
+                                    <br />
+                                    <asp:Button ID="Button1" runat="server" Text="Xem vị trí trên bản đồ" />
+                                </td>
+                                <td>
+                                    <asp:DetailsView ID="dtvBanVeChung" runat="server" AutoGenerateRows="False" 
+                                        DataKeyNames="ID_BV" DataSourceID="SqlDataBVChung" EnableModelValidation="True" 
+                                        Height="50px" Width="499px">
+                                        <Fields>
+                                            <asp:BoundField DataField="Banve" HeaderText="Ký hiệu bản vẽ" 
+                                                SortExpression="Banve" />
+                                            <asp:BoundField DataField="Tendientich" HeaderText="Tên diện tích" 
+                                                SortExpression="Tendientich" />
+                                            <asp:BoundField DataField="Tyle" HeaderText="Tỷ lệ" SortExpression="Tyle" />
+                                            <asp:BoundField DataField="Hetoado" HeaderText="Hệ tọa độ" 
+                                                SortExpression="Hetoado" />
+                                            <asp:BoundField DataField="Kinhtuyentruc" HeaderText="Kinh tuyến trục" 
+                                                SortExpression="Kinhtuyentruc" />
+                                            <asp:BoundField DataField="Muichieu" HeaderText="Múi chiếu" 
+                                                SortExpression="Muichieu" />
+                                            <asp:BoundField DataField="Danhphap" HeaderText="Danh pháp" 
+                                                SortExpression="Danhphap" />
+                                            <asp:BoundField DataField="Tenbanvephucvu" HeaderText="Bản vẽ phục vụ" 
+                                                SortExpression="Tenbanvephucvu" />
+                                        </Fields>
+                                    </asp:DetailsView>
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                </asp:TabPanel>
+                <asp:TabPanel ID="TabPanel9" runat="server" HeaderText="Tọa độ diện tích">
+                    <HeaderTemplate>
+                        Tọa độ DT chung
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <br />
+                        <table class="style1">
+                            <tr>
+                                <td class="style4">
+                                    <strong>Danh sách</strong></td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style4">
+                                    <asp:ListBox ID="lstDTChung" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataBVChung" DataTextField="Banve" DataValueField="ID_BV" 
+                                        Rows="15" Width="276px"></asp:ListBox>
+                                    <asp:SqlDataSource ID="SqlDataToaDoBD" runat="server" 
+                                        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+                                        DeleteCommand="Tdkg_DTChung_delete" DeleteCommandType="StoredProcedure" 
+                                        FilterExpression="ID_BV= '{0}'" InsertCommand="Tdkg_DTChung_add" 
+                                        InsertCommandType="StoredProcedure" SelectCommand="Tdkg_DTChung_getall" 
+                                        SelectCommandType="StoredProcedure" UpdateCommand="Tdkg_DTChung_update" 
+                                        UpdateCommandType="StoredProcedure">
+                                        <FilterParameters>
+                                            <asp:ControlParameter ControlID="lstDTChung" Name="ID_DTCT" 
+                                                PropertyName="SelectedValue" />
+                                        </FilterParameters>
+                                        <InsertParameters>
+                                            <asp:Parameter Name="ID_BV" Type="Int32" />
+                                            <asp:Parameter Name="Tendiem" Type="Int16" />
+                                            <asp:Parameter Name="ToadoX" Type="Double" />
+                                            <asp:Parameter Name="ToadoY" Type="Double" />
+                                        </InsertParameters>
+                                        <UpdateParameters>
+                                            <asp:Parameter Name="Tendiem" Type="Int16" />
+                                            <asp:Parameter Name="ToadoX" Type="Double" />
+                                            <asp:Parameter Name="ToadoY" Type="Double" />
+                                        </UpdateParameters>
+                                    </asp:SqlDataSource>
+                                    <br />
+                                    <br />
+                                </td>
+                                <td valign="top">
+                                    <br />
+                                    <asp:GridView ID="grdToaDoDienTich" runat="server" AllowPaging="True" 
+                                        AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="ID_TDKGD" 
+                                        DataSourceID="SqlDataToaDoBD" EnableModelValidation="True" Width="486px">
+                                        <Columns>
+                                            <asp:BoundField DataField="Tendiem" HeaderText="Tên điểm" 
+                                                SortExpression="Tendiem" />
+                                            <asp:BoundField DataField="ToadoX" HeaderText="X" SortExpression="ToadoX" />
+                                            <asp:BoundField DataField="ToadoY" HeaderText="Y" SortExpression="ToadoY" />
+                                        </Columns>
+                                    </asp:GridView>
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                </asp:TabPanel>
+                <asp:TabPanel ID="TabPanel7" runat="server" HeaderText="Hình DT chung">
+                    <HeaderTemplate>
+                        Hình DT chung
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <br />
+                        <table class="style1">
+                            <tr>
+                                <td class="style3">
+                                    <strong>Danh sách</strong></td>
+                                <td>
+                                    &nbsp;</td>
+                                <td>
+                                    &nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="style3">
+                                    <asp:ListBox ID="lstBVChung1" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataBVChung" DataTextField="Banve" DataValueField="Anh" 
+                                        Height="277px" Rows="20" style="margin-top: 0px" Width="265px">
+                                    </asp:ListBox>
+                                </td>
+                                <td colspan="2">
+                                    <asp:ListBox ID="lstBVChung2" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataBVChung" DataTextField="Banve" DataValueField="Anh" 
+                                        Rows="2" style="margin-top: 0px" Visible="False"></asp:ListBox>
+                                    <asp:Panel ID="Panel1" runat="server" BorderStyle="Ridge" Height="273px" 
+                                        ScrollBars="Auto" Width="500px">
+                                        <asp:Image ID="imgBVChinh" runat="server" />
+                                    </asp:Panel>
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                </asp:TabPanel>
+                <asp:TabPanel ID="TabPanel2" runat="server" HeaderText="TabPanel2">
+                    <HeaderTemplate>
+                        DT khu chi tiết
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <br />
+                        <table class="style1">
+                            <tr>
+                                <td>
+                                    <strong>Danh sách</strong></td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:ListBox ID="lstBVCT" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataDTCT" DataTextField="Banvechitiet" 
+                                        DataValueField="ID_DTCT" Rows="15" Width="276px"></asp:ListBox>
+                                </td>
+                                <td>
+                                    <asp:DetailsView ID="dtvDTChiTiet" runat="server" AutoGenerateRows="False" 
+                                        DataKeyNames="ID_DTCT" DataSourceID="SqlDataDTCT" EnableModelValidation="True" 
+                                        Height="50px" Width="394px">
+                                        <Fields>
+                                            <asp:BoundField DataField="Banvechitiet" HeaderText="Tên bản vẽ" 
+                                                SortExpression="Banvechitiet" />
+                                            <asp:BoundField DataField="Tendientich" HeaderText="Tên diện tích" 
+                                                SortExpression="Tendientich" />
+                                            <asp:BoundField DataField="Vitridialy" HeaderText="Vị trí địa lý" 
+                                                SortExpression="Vitridialy" />
+                                            <asp:BoundField DataField="Dientich" HeaderText="Diện tích" 
+                                                SortExpression="Dientich" />
+                                            <asp:BoundField DataField="Tyle" HeaderText="Tỷ lệ" SortExpression="Tyle" />
+                                            <asp:BoundField DataField="Mucdo" HeaderText="Mức độ" SortExpression="Mucdo" />
+                                            <asp:BoundField DataField="Mucdich" HeaderText="Mục đích" 
+                                                SortExpression="Mucdich" />
+                                            <asp:BoundField DataField="Doituongdieutra" HeaderText="Đối tượng điều tra" 
+                                                SortExpression="Doituongdieutra" />
+                                            <asp:BoundField DataField="Tenbanve" HeaderText="Bản vẽ phục vụ" 
+                                                SortExpression="Tenbanve" />
+                                        </Fields>
+                                    </asp:DetailsView>
+                                </td>
+                            </tr>
+                        </table>
+                        <asp:Button ID="Button2" runat="server" Text="Xem vị trí trên bản đồ" />
+                        <br />
+                        <br />
+                        <br />
+                    </ContentTemplate>
+                </asp:TabPanel>
+                <asp:TabPanel ID="TabPanel5" runat="server" HeaderText="Tọa độ chi tiết">
+                    <HeaderTemplate>
+                        Tọa độ khu chi tiết
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <br />
+                        <table class="style1">
+                            <tr>
+                                <td class="style4">
+                                    <strong>Danh sách</strong></td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style4">
+                                    <asp:ListBox ID="lstBVCT0" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataDTCT" DataTextField="Banvechitiet" 
+                                        DataValueField="ID_DTCT" Rows="15" Width="276px"></asp:ListBox>
+                                    <asp:SqlDataSource ID="SqlDataToaDoCT" runat="server" 
+                                        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+                                        DeleteCommand="Toadokhepgoc_CT_delete" DeleteCommandType="StoredProcedure" 
+                                        FilterExpression="ID_DTCT= '{0}'" InsertCommand="Toadokhepgoc_CT_add" 
+                                        InsertCommandType="StoredProcedure" SelectCommand="Toadokhepgoc_CT_getall" 
+                                        SelectCommandType="StoredProcedure" UpdateCommand="Toadokhepgoc_CT_update" 
+                                        UpdateCommandType="StoredProcedure">
+                                        <DeleteParameters>
+                                            <asp:Parameter Name="ID_TDKGDTCT" Type="Int32" />
+                                        </DeleteParameters>
+                                        <InsertParameters>
+                                            <asp:Parameter Name="ID_DTCT" Type="Int32" />
+                                            <asp:Parameter Name="Tendiem" Type="Int16" />
+                                            <asp:Parameter Name="ToadoX" Type="Double" />
+                                            <asp:Parameter Name="ToadoY" Type="Double" />
+                                        </InsertParameters>
+                                        <UpdateParameters>
+                                            <asp:Parameter Name="ID_TDKGDTCT" Type="Int32" />
+                                            <asp:Parameter Name="Tendiem" Type="Int16" />
+                                            <asp:Parameter Name="ToadoX" Type="Double" />
+                                            <asp:Parameter Name="ToadoY" Type="Double" />
+                                        </UpdateParameters>
+                                        <FilterParameters>
+                                            <asp:ControlParameter ControlID="lstBVCT0" Name="ID_DTCT" 
+                                                PropertyName="SelectedValue" />
+                                        </FilterParameters>
+                                    </asp:SqlDataSource>
+                                </td>
+                                <td valign="top">
+                                    <br />
+                                    <asp:GridView ID="grdToaDoCT" runat="server" AllowPaging="True" 
+                                        AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="ID_TDKGDTCT" 
+                                        DataSourceID="SqlDataToaDoCT" EnableModelValidation="True" Width="486px">
+                                        <Columns>
+                                            <asp:BoundField DataField="Tendiem" HeaderText="Tên điểm" 
+                                                SortExpression="Tendiem" />
+                                            <asp:BoundField DataField="ToadoX" HeaderText="X" SortExpression="ToadoX" />
+                                            <asp:BoundField DataField="ToadoY" HeaderText="Y" SortExpression="ToadoY" />
+                                        </Columns>
+                                    </asp:GridView>
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                </asp:TabPanel>
+                <asp:TabPanel ID="TabPanel6" runat="server" HeaderText="Hình DT chi tiết">
+                    <HeaderTemplate>
+                        Hình DT khu chi tiết
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <br />
+                        <br />
+                        <table class="style1">
+                            <tr>
+                                <td class="style3">
+                                    <strong>Danh sách</strong></td>
+                                <td>
+                                    &nbsp;</td>
+                                <td>
+                                    &nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="style3">
+                                    <asp:ListBox ID="lstDTCT1" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataDTCT" DataTextField="Banvechitiet" DataValueField="Anh" 
+                                        Height="277px" Rows="20" style="margin-top: 0px" Width="265px">
+                                    </asp:ListBox>
+                                </td>
+                                <td colspan="2">
+                                    <asp:ListBox ID="lstBVCT1" runat="server" AutoPostBack="True" 
+                                        DataSourceID="SqlDataDTCT" DataTextField="Banvechitiet" DataValueField="Anh" 
+                                        Rows="2" style="margin-top: 0px" Visible="False"></asp:ListBox>
+                                    <asp:Panel ID="Panel2" runat="server" BorderStyle="Ridge" Height="273px" 
+                                        ScrollBars="Auto" Width="500px">
+                                        <asp:Image ID="imgBVCT" runat="server" />
+                                    </asp:Panel>
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                </asp:TabPanel>
+            </asp:TabContainer>
+        </ContentTemplate>
+    </asp:UpdatePanel>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <asp:SqlDataSource runat="server" 
+        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+        DeleteCommand="DELETE FROM [Dientichchitiet] WHERE [ID_DTCT] = @ID_DTCT" 
+        InsertCommand="INSERT INTO [Dientichchitiet] ([KHLT], [Banvechitiet], [Tendientich], [Vitridialy], [Dientich], [Tyle], [Mucdo], [Mucdich], [Doituongdieutra], [Tenbanve], [Anh], [geo]) VALUES (@KHLT, @Banvechitiet, @Tendientich, @Vitridialy, @Dientich, @Tyle, @Mucdo, @Mucdich, @Doituongdieutra, @Tenbanve, @Anh, @geo)" 
+        ProviderName="<%$ ConnectionStrings:MucdonghiencuuConnectionString1.ProviderName %>" 
+        SelectCommand="SELECT * FROM [Dientichchitiet]" 
+        UpdateCommand="UPDATE [Dientichchitiet] SET [Banvechitiet] = @Banvechitiet, [Tendientich] = @Tendientich, [Vitridialy] = @Vitridialy, [Dientich] = @Dientich, [Tyle] = @Tyle, [Mucdo] = @Mucdo, [Mucdich] = @Mucdich, [Doituongdieutra] = @Doituongdieutra, [Tenbanve] = @Tenbanve, [Anh] = @Anh, [geo] = @geo WHERE [ID_DTCT] = @ID_DTCT" 
+        FilterExpression="KHLT= '{0}'"
+        ID="SqlDataDTCT">
+        <FilterParameters>
+            <asp:ControlParameter ControlID="drDeAn" Name="KHLT" PropertyName="SelectedValue" />
+        </FilterParameters>
+        <DeleteParameters>
+            <asp:Parameter Name="ID_DTCT" Type="Int32"></asp:Parameter>
+        </DeleteParameters>
+        <InsertParameters>
+            <asp:Parameter Name="KHLT" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Banvechitiet" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Tendientich" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Vitridialy" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Dientich" Type="Double"></asp:Parameter>
+            <asp:Parameter Name="Tyle" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Mucdo" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Mucdich" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Doituongdieutra" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Tenbanve" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Anh" Type="String"></asp:Parameter>
+            <asp:Parameter Name="geo" Type="Object"></asp:Parameter>
+        </InsertParameters>
+        <UpdateParameters>
+            <asp:Parameter Name="KHLT" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Banvechitiet" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Tendientich" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Vitridialy" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Dientich" Type="Double"></asp:Parameter>
+            <asp:Parameter Name="Tyle" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Mucdo" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Mucdich" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Doituongdieutra" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Tenbanve" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Anh" Type="String"></asp:Parameter>
+            <asp:Parameter Name="geo" Type="Object"></asp:Parameter>
+            <asp:Parameter Name="ID_DTCT" Type="Int32"></asp:Parameter>
+        </UpdateParameters>
+    </asp:SqlDataSource>
+    <br />
+    <asp:SqlDataSource runat="server" 
+        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+        DeleteCommand="Toadokhepgoc_DTC_delete" DeleteCommandType="StoredProcedure" 
+        InsertCommand="Toadokhepgoc_DTC_add" InsertCommandType="StoredProcedure" 
+        ProviderName="<%$ ConnectionStrings:MucdonghiencuuConnectionString1.ProviderName %>" 
+        SelectCommand="Toadokhepgoc_DTC_getall" SelectCommandType="StoredProcedure" 
+        UpdateCommand="Toadokhepgoc_DTC_update" UpdateCommandType="StoredProcedure" 
+        FilterExpression="KHLT= '{0}'"
+        ID="SqlDataToaDoChinh">
+        <FilterParameters>
+            <asp:ControlParameter ControlID="drDeAn" Name="KHLT" PropertyName="SelectedValue" />
+        </FilterParameters>
+        <DeleteParameters>
+            <asp:Parameter Name="ID_TDKGDTC" Type="Int32"></asp:Parameter>
+        </DeleteParameters>
+        <InsertParameters>
+            <asp:Parameter Name="KHLT" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Tendiem" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="ToadoX" Type="Double"></asp:Parameter>
+            <asp:Parameter Name="ToadoY" Type="Double"></asp:Parameter>
+        </InsertParameters>
+        <UpdateParameters>
+            <asp:Parameter Name="ID_TDKGDTC" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="Tendiem" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="ToadoX" Type="Double"></asp:Parameter>
+            <asp:Parameter Name="ToadoY" Type="Double"></asp:Parameter>
+        </UpdateParameters>
+    </asp:SqlDataSource>
+    <br />
+    <asp:SqlDataSource runat="server" 
+        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+        DeleteCommand="DELETE FROM [khoiluongthicong] WHERE [ID_KLTC] = @ID_KLTC" 
+        InsertCommand="INSERT INTO [khoiluongthicong] ([KHLT], [HangmucCT], [Donvitinh], [Khongluong]) VALUES (@KHLT, @HangmucCT, @Donvitinh, @Khongluong)" 
+        ProviderName="<%$ ConnectionStrings:MucdonghiencuuConnectionString1.ProviderName %>" 
+        SelectCommand="SELECT * FROM [khoiluongthicong]" 
+        UpdateCommand="UPDATE [khoiluongthicong] SET  [HangmucCT] = @HangmucCT, [Donvitinh] = @Donvitinh, [Khongluong] = @Khongluong WHERE [ID_KLTC] = @ID_KLTC" 
+        FilterExpression="KHLT= '{0}'"
+         ID="SqlDataKLTC">
+        <FilterParameters>
+            <asp:ControlParameter ControlID="drDeAn" Name="KHLT" PropertyName="SelectedValue" />
+        </FilterParameters>
+        <DeleteParameters>
+            <asp:Parameter Name="ID_KLTC" Type="Int32"></asp:Parameter>
+        </DeleteParameters>
+        <InsertParameters>
+            <asp:Parameter Name="KHLT" Type="String"></asp:Parameter>
+            <asp:Parameter Name="HangmucCT" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Donvitinh" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Khongluong" Type="String"></asp:Parameter>
+        </InsertParameters>
+        <UpdateParameters>
+            <asp:Parameter Name="KHLT" Type="String"></asp:Parameter>
+            <asp:Parameter Name="HangmucCT" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Donvitinh" Type="String"></asp:Parameter>
+            <asp:Parameter Name="Khongluong" Type="String"></asp:Parameter>
+            <asp:Parameter Name="ID_KLTC" Type="Int32" />
+        </UpdateParameters>
+    </asp:SqlDataSource>
+    <br />
+    <br />
+    <asp:SqlDataSource runat="server" 
+        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+        DeleteCommand="DELETE FROM [BanVeChung] WHERE [ID_BV] = @ID_BV" 
+        InsertCommand="INSERT INTO [BanVeChung] ([KHLT], [Banve], [Tendientich], [Tyle], [Hetoado], [Kinhtuyentruc], [Muichieu], [Danhphap], [Tenbanvephucvu]) VALUES (@KHLT, @Banve, @Tendientich, @Tyle, @Hetoado, @Kinhtuyentruc, @Muichieu, @Danhphap, @Tenbanvephucvu)" 
+        SelectCommand="SELECT * FROM [BanVeChung]" 
+        UpdateCommand="UPDATE [BanVeChung] SET [KHLT] = @KHLT, [Banve] = @Banve, [Tendientich] = @Tendientich, [Tyle] = @Tyle, [Hetoado] = @Hetoado, [Kinhtuyentruc] = @Kinhtuyentruc, [Muichieu] = @Muichieu, [Danhphap] = @Danhphap, [Tenbanvephucvu] = @Tenbanvephucvu WHERE [ID_BV] = @ID_BV" 
+         FilterExpression="KHLT= '{0}'"
+         ID="SqlDataBVChung">
+        <DeleteParameters>
+            <asp:Parameter Name="ID_BV" Type="Int32" />
+        </DeleteParameters>
+        <FilterParameters>
+            <asp:ControlParameter ControlID="drDeAn" Name="KHLT" PropertyName="SelectedValue" />
+        </FilterParameters>
+        <InsertParameters>
+            <asp:Parameter Name="KHLT" Type="String" />
+            <asp:Parameter Name="Banve" Type="String" />
+            <asp:Parameter Name="Tendientich" Type="String" />
+            <asp:Parameter Name="Tyle" Type="String" />
+            <asp:Parameter Name="Hetoado" Type="String" />
+            <asp:Parameter Name="Kinhtuyentruc" Type="Double" />
+            <asp:Parameter Name="Muichieu" Type="String" />
+            <asp:Parameter Name="Danhphap" Type="String" />
+            <asp:Parameter Name="Tenbanvephucvu" Type="String" />
+        </InsertParameters>
+        <UpdateParameters>
+            <asp:Parameter Name="KHLT" Type="String" />
+            <asp:Parameter Name="Banve" Type="String" />
+            <asp:Parameter Name="Tendientich" Type="String" />
+            <asp:Parameter Name="Tyle" Type="String" />
+            <asp:Parameter Name="Hetoado" Type="String" />
+            <asp:Parameter Name="Kinhtuyentruc" Type="Double" />
+            <asp:Parameter Name="Muichieu" Type="String" />
+            <asp:Parameter Name="Danhphap" Type="String" />
+            <asp:Parameter Name="Tenbanvephucvu" Type="String" />
+            <asp:Parameter Name="ID_BV" Type="Int32" />
+        </UpdateParameters>
+    </asp:SqlDataSource>
+    <br />
+    <asp:SqlDataSource 
+         runat="server" 
+        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+        DeleteCommand="DELETE FROM [Phieudieutra] WHERE [KHLT] = @KHLT" 
+        InsertCommand="INSERT INTO [Phieudieutra] ([KHLT], [Tenbaocao], [Chubien], [Donvithuchien], [namnopluutru], [thoigianthicong], [nguonvonthuchien], [tongvondautu], [vitrihanhchinh], [mucdodieutra], [nhomnhiemvudieutra], [doituongdieutra], [Dientichtoandean], [Soluongbanve]) VALUES (@KHLT, @Tenbaocao, @Chubien, @Donvithuchien, @namnopluutru, @thoigianthicong, @nguonvonthuchien, @tongvondautu, @vitrihanhchinh, @mucdodieutra, @nhomnhiemvudieutra, @doituongdieutra, @Dientichtoandean, @Soluongbanve)" 
+        ProviderName="<%$ ConnectionStrings:MucdonghiencuuConnectionString1.ProviderName %>" 
+        SelectCommand="SELECT * FROM [Phieudieutra]" 
+        
+        UpdateCommand="UPDATE [Phieudieutra] SET [Tenbaocao] = @Tenbaocao, [Chubien] = @Chubien, [Donvithuchien] = @Donvithuchien, [namnopluutru] = @namnopluutru, [thoigianthicong] = @thoigianthicong, [nguonvonthuchien] = @nguonvonthuchien, [tongvondautu] = @tongvondautu, [vitrihanhchinh] = @vitrihanhchinh, [mucdodieutra] = @mucdodieutra, [nhomnhiemvudieutra] = @nhomnhiemvudieutra, [doituongdieutra] = @doituongdieutra, [Dientichtoandean] = @Dientichtoandean, [Soluongbanve] = @Soluongbanve WHERE [KHLT] = @KHLT"
+       
+        ID="SqlDataMain" >
+        <DeleteParameters>
+            <asp:Parameter Name="KHLT" Type="String" />
+        </DeleteParameters>
+        <InsertParameters>
+            <asp:Parameter Name="KHLT" Type="String" />
+            <asp:Parameter Name="Tenbaocao" Type="String" />
+            <asp:Parameter Name="Chubien" Type="String" />
+            <asp:Parameter Name="Donvithuchien" Type="String" />
+            <asp:Parameter Name="namnopluutru" Type="Int32" />
+            <asp:Parameter Name="thoigianthicong" Type="String" />
+            <asp:Parameter Name="nguonvonthuchien" Type="String" />
+            <asp:Parameter Name="tongvondautu" Type="String" />
+            <asp:Parameter Name="vitrihanhchinh" Type="String" />
+            <asp:Parameter Name="mucdodieutra" Type="String" />
+            <asp:Parameter Name="nhomnhiemvudieutra" Type="String" />
+            <asp:Parameter Name="doituongdieutra" Type="String" />
+            <asp:Parameter Name="Dientichtoandean" Type="Double" />
+            <asp:Parameter Name="Soluongbanve" Type="Int16" />
+        </InsertParameters>
+        <UpdateParameters>
+            <asp:Parameter Name="IDBaocao" Type="Int32" />
+            <asp:Parameter Name="Tenbaocao" Type="String" />
+            <asp:Parameter Name="Chubien" Type="String" />
+            <asp:Parameter Name="Donvithuchien" Type="String" />
+            <asp:Parameter Name="namnopluutru" Type="Int32" />
+            <asp:Parameter Name="thoigianthicong" Type="String" />
+            <asp:Parameter Name="nguonvonthuchien" Type="String" />
+            <asp:Parameter Name="tongvondautu" Type="String" />
+            <asp:Parameter Name="vitrihanhchinh" Type="String" />
+            <asp:Parameter Name="mucdodieutra" Type="String" />
+            <asp:Parameter Name="nhomnhiemvudieutra" Type="String" />
+            <asp:Parameter Name="doituongdieutra" Type="String" />
+            <asp:Parameter Name="Dientichtoandean" Type="Double" />
+            <asp:Parameter Name="Soluongbanve" Type="Int16" />
+            <asp:Parameter Name="KHLT" Type="String" />
+        </UpdateParameters>
+    </asp:SqlDataSource>
+    <br />
+    <asp:SqlDataSource 
+         runat="server" 
+        ConnectionString="<%$ ConnectionStrings:MucdonghiencuuConnectionString1 %>" 
+        DeleteCommand="DELETE FROM [Phieudieutra] WHERE [KHLT] = @KHLT" 
+        InsertCommand="INSERT INTO [Phieudieutra] ([KHLT], [Tenbaocao], [Chubien], [Donvithuchien], [namnopluutru], [thoigianthicong], [nguonvonthuchien], [tongvondautu], [vitrihanhchinh], [mucdodieutra], [nhomnhiemvudieutra], [doituongdieutra], [Dientichtoandean], [Soluongbanve]) VALUES (@KHLT, @Tenbaocao, @Chubien, @Donvithuchien, @namnopluutru, @thoigianthicong, @nguonvonthuchien, @tongvondautu, @vitrihanhchinh, @mucdodieutra, @nhomnhiemvudieutra, @doituongdieutra, @Dientichtoandean, @Soluongbanve)" 
+        ProviderName="<%$ ConnectionStrings:MucdonghiencuuConnectionString1.ProviderName %>" 
+        SelectCommand="SELECT * FROM [Phieudieutra]" 
+        
+        UpdateCommand="UPDATE [Phieudieutra] SET [Tenbaocao] = @Tenbaocao, [Chubien] = @Chubien, [Donvithuchien] = @Donvithuchien, [namnopluutru] = @namnopluutru, [thoigianthicong] = @thoigianthicong, [nguonvonthuchien] = @nguonvonthuchien, [tongvondautu] = @tongvondautu, [vitrihanhchinh] = @vitrihanhchinh, [mucdodieutra] = @mucdodieutra, [nhomnhiemvudieutra] = @nhomnhiemvudieutra, [doituongdieutra] = @doituongdieutra, [Dientichtoandean] = @Dientichtoandean, [Soluongbanve] = @Soluongbanve WHERE [KHLT] = @KHLT"
+        FilterExpression="KHLT= '{0}'"
+        ID="SqlDataMain0" >
+        <FilterParameters>
+            <asp:ControlParameter ControlID="drDeAn" Name="KHLT" PropertyName="SelectedValue" />
+        </FilterParameters>
+        <DeleteParameters>
+            <asp:Parameter Name="KHLT" Type="String" />
+        </DeleteParameters>
+        <InsertParameters>
+            <asp:Parameter Name="KHLT" Type="String" />
+            <asp:Parameter Name="Tenbaocao" Type="String" />
+            <asp:Parameter Name="Chubien" Type="String" />
+            <asp:Parameter Name="Donvithuchien" Type="String" />
+            <asp:Parameter Name="namnopluutru" Type="Int32" />
+            <asp:Parameter Name="thoigianthicong" Type="String" />
+            <asp:Parameter Name="nguonvonthuchien" Type="String" />
+            <asp:Parameter Name="tongvondautu" Type="String" />
+            <asp:Parameter Name="vitrihanhchinh" Type="String" />
+            <asp:Parameter Name="mucdodieutra" Type="String" />
+            <asp:Parameter Name="nhomnhiemvudieutra" Type="String" />
+            <asp:Parameter Name="doituongdieutra" Type="String" />
+            <asp:Parameter Name="Dientichtoandean" Type="Double" />
+            <asp:Parameter Name="Soluongbanve" Type="Int16" />
+        </InsertParameters>
+        <UpdateParameters>
+            <asp:Parameter Name="IDBaocao" Type="Int32" />
+            <asp:Parameter Name="Tenbaocao" Type="String" />
+            <asp:Parameter Name="Chubien" Type="String" />
+            <asp:Parameter Name="Donvithuchien" Type="String" />
+            <asp:Parameter Name="namnopluutru" Type="Int32" />
+            <asp:Parameter Name="thoigianthicong" Type="String" />
+            <asp:Parameter Name="nguonvonthuchien" Type="String" />
+            <asp:Parameter Name="tongvondautu" Type="String" />
+            <asp:Parameter Name="vitrihanhchinh" Type="String" />
+            <asp:Parameter Name="mucdodieutra" Type="String" />
+            <asp:Parameter Name="nhomnhiemvudieutra" Type="String" />
+            <asp:Parameter Name="doituongdieutra" Type="String" />
+            <asp:Parameter Name="Dientichtoandean" Type="Double" />
+            <asp:Parameter Name="Soluongbanve" Type="Int16" />
+            <asp:Parameter Name="KHLT" Type="String" />
+        </UpdateParameters>
+    </asp:SqlDataSource>
+</asp:Content>
