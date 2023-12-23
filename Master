@@ -1,0 +1,175 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="186.master.cs" Inherits="Portal_186._186" %>
+<%@ Register assembly="DevExpress.Web.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxNavBar" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxSplitter" tagprefix="dx" %>
+
+<%@ Register assembly="DevExpress.Web.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGlobalEvents" tagprefix="dx" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <title>Hệ thống quản lý tính tiền hoàn trả và tiền cấp quyền</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="~/Css/Css186.css"/>
+        <asp:ContentPlaceHolder ID="head" runat="server">
+        </asp:ContentPlaceHolder>
+        <style type="text/css">
+            .auto-style1 {
+                float: right;
+                text-align: right;
+            }
+            .Center
+            {
+                background-image: url('/Image/HeaderBg.png');
+                width:100%;
+                height: 80px;
+                background-size: 960px 80px;
+                padding:0px 0px 0px 0px;
+                margin:auto;
+            }
+            .ImageCenter
+            {
+                background-image: url('/Image/Banner2023.png');
+                width:100%;
+                height: 80px;
+                background-size: 996px 80px;
+                padding:0px 0px 0px 0px;
+                margin:auto;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="form1" runat="server">
+            <div>
+                <dx:ASPxSplitter ID="ASPxSplitter1" runat="server" Orientation="Vertical" FullscreenMode="True" Height="100%" Width="100%" Theme="PlasticBlue" ClientInstanceName="splitter">
+                    <Panes>
+                        <dx:SplitterPane ShowCollapseBackwardButton="True" ShowCollapseForwardButton="True" Size="80px">
+                            <PaneStyle>
+                                <Paddings Padding="0px" PaddingBottom="0px" PaddingLeft="0px" PaddingRight="0px" PaddingTop="0px" />
+                            </PaneStyle>
+                            <ContentCollection>
+                            <dx:SplitterContentControl runat="server">
+                                <div class ="Center">
+                                    <div class ="ImageCenter">
+
+                                    </div>
+                                </div>
+                            </dx:SplitterContentControl>
+                            </ContentCollection>
+                        </dx:SplitterPane>
+                        <dx:SplitterPane>
+                            <Panes>
+                                <dx:SplitterPane ScrollBars="Both" ShowCollapseBackwardButton="True" Size="230px">
+                                    <ContentCollection>
+                                        <dx:SplitterContentControl runat="server">
+                                            <dx:ASPxNavBar ID="ASPxNavBar1" runat="server" AllowSelectItem="True" Height="100%" ShowExpandButtons="False" Theme="PlasticBlue" Width="100%" SaveStateToCookies="True" SaveStateToCookiesID="NavMenu" OnLoad="ASPxNavBar1_Load">
+                                                <Groups>
+                                                    <dx:NavBarGroup Name="Group 1" Text="Group 1">
+                                                        <Items>
+                                                            <dx:NavBarItem Name="1" Text="1">
+                                                            </dx:NavBarItem>
+                                                            <dx:NavBarItem Name="2" Text="2">
+                                                            </dx:NavBarItem>
+                                                            <dx:NavBarItem Name="3" Text="3">
+                                                            </dx:NavBarItem>
+                                                        </Items>
+                                                    </dx:NavBarGroup>
+                                                    <dx:NavBarGroup Expanded="False" Name="Group 1" Text="Group 2">
+                                                        <Items>
+                                                            <dx:NavBarItem Text="1">
+                                                            </dx:NavBarItem>
+                                                            <dx:NavBarItem Text="2">
+                                                            </dx:NavBarItem>
+                                                            <dx:NavBarItem Text="3">
+                                                            </dx:NavBarItem>
+                                                        </Items>
+                                                    </dx:NavBarGroup>
+                                                    <dx:NavBarGroup Expanded="False" Name="Group 1" Text="Group 3">
+                                                        <Items>
+                                                            <dx:NavBarItem Text="1">
+                                                            </dx:NavBarItem>
+                                                            <dx:NavBarItem Text="2">
+                                                            </dx:NavBarItem>
+                                                            <dx:NavBarItem Text="3">
+                                                            </dx:NavBarItem>
+                                                        </Items>
+                                                    </dx:NavBarGroup>
+                                                </Groups>
+                                                <Paddings Padding="0px" />
+                                            </dx:ASPxNavBar>
+                                        </dx:SplitterContentControl>
+                                    </ContentCollection>
+                                </dx:SplitterPane>
+                                <dx:SplitterPane ShowCollapseBackwardButton="True" ShowCollapseForwardButton="True">
+                                    <Panes>
+                                        <dx:SplitterPane ShowCollapseBackwardButton="True" Size="15px">
+                                            <ContentCollection>
+                                                <dx:SplitterContentControl runat="server">
+                                                    <%--<div id ="RightPanel" class ="RightPanel">--%>
+                                                        <div id ="HeadInfo" class="RightHeadInfo">
+                                                            <div id="HeadInfo1" class="HeadInfoDetail">
+                                                                <dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="lblCurrentLink" Text="Bạn đang ở mục: " Font-Bold="True" Font-Italic="False" Font-Size="Small" ForeColor="Blue">
+                                                                </dx:ASPxLabel>
+                                                            </div>
+                                                            <div id="HeadInfoDetail" class="HeadInfoDetail">
+                                                                <dx:ASPxLabel ID="CurrentLink" runat="server" ClientInstanceName="lblCurrentLink" Text="Trang chủ" Font-Bold="True" Font-Italic="False" Font-Size="Small" ForeColor="Red">
+                                                                </dx:ASPxLabel>
+                                                            </div>
+                                                            <div id="Logout" class="auto-style1">
+                                                                <asp:Label ID="lblUser" runat="server" Text="Nguyễn Đình Hội" CssClass="UserName"></asp:Label>
+                                                                <asp:LinkButton ID="btnLogOut" runat="server" CssClass="LogOutBtn" OnClick="btnLogOut_Click">Đăng xuất</asp:LinkButton>
+                                                            </div>
+                                                        </div>
+                                                        <div id ="ContentInfo" class="RightContentInfo">
+                                                            <asp:ContentPlaceHolder ID="ContentPlaceHolder2" runat="server">
+                                
+                                                            </asp:ContentPlaceHolder>
+                                                        </div>
+                                                    <%--</div>--%>
+                                                </dx:SplitterContentControl>
+                                            </ContentCollection>
+                                        </dx:SplitterPane>
+                                        <dx:SplitterPane ShowCollapseBackwardButton="True" ShowCollapseForwardButton="True" Size="80%" Name="CONTENT">
+                                            <ContentCollection>
+                                                <dx:SplitterContentControl runat="server">
+                                                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                                        
+                                                    </asp:ContentPlaceHolder>
+                                                </dx:SplitterContentControl>
+                                            </ContentCollection>
+                                        </dx:SplitterPane>
+                                        <dx:SplitterPane ShowCollapseBackwardButton="True" ShowCollapseForwardButton="True" ShowSeparatorImage="True" Size="10%">
+                                            <ContentCollection>
+                                                <dx:SplitterContentControl runat="server">
+                                                    <div>
+                                                        <p><strong>Bản quyền thuộc Cục Khoáng sản Việt Nam.<br> Địa chỉ: Số 6 Phạm Ngũ Lão, Hà Nội. Tel: (84-4) 38260674. Fax: (84-4) 38254734. Email: <em>webmaster@dgmv.gov.vn</em> <em><br> </em>Chịu trách nhiệm nội dung: Cục Trưởng Cục Khoáng Sản Việt Nam.</strong></p>
+                                                        <br>
+                                                        <br></br>
+                                                        </br>
+                                                    </div>
+                                                </dx:SplitterContentControl>
+                                            </ContentCollection>
+                                        </dx:SplitterPane>
+                                    </Panes>
+                                    <ContentCollection>
+                                        <dx:SplitterContentControl runat="server">
+                                        </dx:SplitterContentControl>
+                                    </ContentCollection>
+                                </dx:SplitterPane>
+                            </Panes>
+                            <ContentCollection>
+                            <dx:SplitterContentControl runat="server">
+                                
+                            </dx:SplitterContentControl>
+                            </ContentCollection>
+                        </dx:SplitterPane>
+                    </Panes>
+                </dx:ASPxSplitter>
+                
+            </div>
+        </form>
+    </body>
+</html>
