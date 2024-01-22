@@ -1,0 +1,80 @@
+<%@ Page Title="" Language="C#" MasterPageFile="~/186.Master" AutoEventWireup="true" CodeBehind="CoordinatesList.aspx.cs" Inherits="Portal_186.Dictionary.CoordinatesList" %>
+<%@ Register assembly="DevExpress.Web.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
+
+<%@ Register assembly="DevExpress.Web.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <script type="text/javascript">
+        var command;
+        function OnBeginCallback(s, e) {
+            command = e.command;
+        }
+        function OnEndCallback(s, e) {
+            if (typeof s.cpClientAlert != "undefined") {
+                if (s.cpClientAlert != "")
+                    alert(s.cpClientAlert);
+                delete s.cpClientAlert;
+            }
+            AdjustSize(s);
+        }
+        function AdjustSize(grid) {
+            var containerHeight = splitter.GetPaneByName("CONTENT").GetClientHeight();
+            grid.SetHeight(containerHeight);
+        }
+    </script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <dx:ASPxGridView ID="grd" runat="server" AutoGenerateColumns="False" 
+            EnableTheming="True" onrowdeleting="grd_RowDeleting" OnCommandButtonInitialize="grd_CommandButtonInitialize"
+            onrowinserting="grd_RowInserting" onrowupdating="grd_RowUpdating" 
+            onrowvalidating="grd_RowValidating" Theme="PlasticBlue" Width="100%" 
+            KeyFieldName="ID_HeToaDo" PreviewFieldName="TenHeToaDo">
+            <ClientSideEvents Init="function(s, e) { AdjustSize(s); }" BeginCallback="OnBeginCallback" EndCallback="OnEndCallback"/>
+            <Columns>
+                <dx:GridViewCommandColumn ButtonType="Button" ShowNewButtonInHeader="true" VisibleIndex="0" Width="110px" 
+                    Caption="Chức năng">
+                    <%--<NewButton Text="Thêm" Visible="True">
+                    </NewButton>--%>
+                    <EditButton Text="Sửa" Visible="True">
+                    </EditButton>
+                    <DeleteButton Text="Xóa" Visible="True">
+                    </DeleteButton>
+                    <ClearFilterButton Visible="True">
+                    </ClearFilterButton>
+                    <CellStyle>
+                        <Paddings PaddingLeft="10px" PaddingRight="10px" />
+                    </CellStyle>
+                    <GroupFooterCellStyle>
+                        <Paddings PaddingLeft="10px" PaddingRight="10px" />
+                    </GroupFooterCellStyle>
+                </dx:GridViewCommandColumn>
+                <dx:GridViewDataTextColumn Caption="Mã Hệ tọa độ" FieldName="ID_HeToaDo" 
+                    Name="ID_DVCS" Visible="False" >
+                </dx:GridViewDataTextColumn>
+                <dx:GridViewDataTextColumn Caption="Tên hệ tọa độ" FieldName="TenHeToaDo" 
+                    Name="TenDonViCongSuat" VisibleIndex="1">
+                    <Settings AutoFilterCondition="Contains" />
+                </dx:GridViewDataTextColumn>
+            </Columns>
+            <SettingsPager Position="Top" AlwaysShowPager="True" CurrentPageNumberFormat="[Đang hiển thị Trang số: {0}]" PageSize="20">
+                <Summary AllPagesText="Trang: {0} - {1} ({2} bản ghi)" Text="Trang {0} trong {1} trang ({2} bản ghi)" />
+                <PageSizeItemSettings Visible="True" Caption="------->>> Thay đổi hiển thị [- Số dòng/Trang -] ở đây:" Items="10, 12 , 14, 16, 18, 20, 25, 30, 35, 40, 50">
+                </PageSizeItemSettings>
+            </SettingsPager>
+            <SettingsText GroupPanel="Bấm và kéo tiêu đề cột thả vào đây để nhóm theo cột đó. Bấm và thả trở lại cột để bỏ nhóm theo cột."/>
+            <SettingsBehavior ColumnResizeMode="Control" />
+            <SettingsEditing EditFormColumnCount="1" Mode="PopupEditForm" />
+            <SettingsPopup>
+                <EditForm Width="800" AllowResize="True" HorizontalAlign="WindowCenter" Modal="True" VerticalAlign="WindowCenter" />
+            </SettingsPopup>
+            <SettingsText PopupEditFormCaption="Danh mục đơn vị công suất" CommandClearFilter="Xóa tìm kiếm"/>
+            <SettingsBehavior ConfirmDelete="True"/>
+            <Settings ShowFilterRow="True" VerticalScrollBarMode ="Auto"/>
+            <SettingsLoadingPanel Delay="100" Text="Đang xử lý dữ liệu, vui lòng đợi giây lát ..." />
+            <SettingsText CommandCancel="Hủy" CommandDelete="Xóa" CommandEdit="Sửa" CommandNew="Thêm mới" CommandSelect="Chọn" CommandUpdate="Cập nhật" ConfirmDelete="Bạn có chắc muốn xóa dữ liệu này không ?" />
+            <Styles>
+                <CommandColumn Spacing="5px" Wrap="False" />
+            </Styles>
+        </dx:ASPxGridView>
+</asp:Content>
+
