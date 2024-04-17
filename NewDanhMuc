@@ -1,0 +1,199 @@
+using System;
+using System.Windows.Forms;
+using QuanLyThuPhiTaiLieu.Biz;
+using QuanLyThuPhiTaiLieu.Common;
+using QuanLyThuPhiTaiLieu.Entity;
+using System.IO;
+
+namespace QuanLyThuPhiTaiLieu.Forms
+{
+    public partial class NewDanhMuc : Form
+    {
+        private int id;
+        public bool IsDialog { get; set; }
+
+        public int DanhMucId
+        {
+            get
+            {
+                return id;
+            }
+        }
+
+        public string DanhMucKhlt
+        {
+            get
+            {
+                return textKhlt.Text;
+            }
+        }
+
+        public string DanhMucTenBaoCao
+        {
+            get
+            {
+                return textTenBaoCao.Text;
+            }
+        }
+
+        public NewDanhMuc()
+        {
+            InitializeComponent();
+            buttonNewDetail.Visible = false;
+            buttonAddBoSung.Visible = false;
+
+            if (IsDialog)
+            {
+                buttonSave.DialogResult = System.Windows.Forms.DialogResult.OK;                
+            }
+        }
+
+        public NewDanhMuc(int id)
+        {
+            InitializeComponent();
+
+            this.id = id;
+        }
+
+        private void SaveItem(object sender, EventArgs e)
+        {
+            if (Validate())
+            {
+                string message;
+
+                var biz = new DanhMucBiz();
+
+                var item = new DanhMuc
+                {                   
+                    Sqb = textSbq.Text,
+                    Khlt = textKhlt.Text,
+                    TenBaoCao = textTenBaoCao.Text,
+                    NamLt = Convert.ToInt32(numberNamTl.Value),
+                    TacGia = textTenTacGia.Text,
+                    DonVi = textDonVi.Text,
+                    TyLe = textTyLe.Text,
+                    Thh = textThh.Text,
+                    Sh = textSh.Text,
+                    Ebook = textEbook.Text,
+                    Tinh = textTinh.Text,
+                    PhucChe = textPhucChe.Text
+                };
+
+                if (id > 0)
+                {
+                    item.Id = id;
+                    biz.UpdateItem(item);                    
+                    message = Constants.Messages.UpdateCompleted;
+                }
+                else
+                {
+                    biz.SaveItem(item);
+                    id = item.Id;
+                    message = Constants.Messages.InsertCompleted;
+                }
+
+                MessageBox.Show(message);
+                GoBack();
+            }
+        }
+
+        private void GoBack()
+        {
+            if (IsDialog)
+            {                
+                this.Close();
+            }
+            else
+            {
+                Utilities.CloseForm(this, new ViewDanhMuc());
+            }
+        }
+        
+        private void Cancel(object sender, EventArgs e)
+        {
+            GoBack();
+        }
+
+        private new bool Validate()
+        {
+            bool hasError = true;
+            bool isFocused = false;
+            errorProvider.Clear();
+
+            if (string.IsNullOrEmpty(textSbq.Text))
+            {
+                errorProvider.SetError(textSbq, Constants.Messages.RequireMessage);
+                hasError = false;
+
+                textSbq.Focus();
+                isFocused = true;
+            }
+
+            if (string.IsNullOrEmpty(textKhlt.Text))
+            {
+                errorProvider.SetError(textKhlt, Constants.Messages.RequireMessage);
+                hasError = false;
+
+                if (!isFocused)
+                {
+                    textKhlt.Focus();
+                }
+                isFocused = true;
+            }
+
+            if (string.IsNullOrEmpty(textTenBaoCao.Text))
+            {
+                errorProvider.SetError(textTenBaoCao, Constants.Messages.RequireMessage);
+                hasError = false;
+                if (!isFocused)
+                {
+                    textTenBaoCao.Focus();
+                }
+            }
+
+            return hasError;
+        }
+
+        private void FormLoad(object sender, EventArgs e)
+        {
+            var parent = MdiParent as MDI;
+            if (parent != null)
+            {
+                //Utilities.ResetBackColor(parent.TopMenu, Constants.MenuIndex.TaiLieuVanBanPhapLy);
+                parent.Status.Text = Constants.FormStatus.DanhMuc;
+            }
+
+            if (id > 0)
+            {
+                var biz = new DanhMucBiz();
+                var item = biz.LoadItem(id);
+
+                textSbq.Text = item.Sqb;
+                textKhlt.Text = item.Khlt;
+                textTenBaoCao.Text = item.TenBaoCao;
+                numberNamTl.Value = item.NamLt;
+                textTenTacGia.Text = item.TacGia;
+                textDonVi.Text = item.DonVi;
+                textTyLe.Text = item.TyLe;
+                textThh.Text = item.Thh;
+                textSh.Text = item.Sh;
+                textEbook.Text = item.Ebook;
+                textTinh.Text = item.Tinh;
+                textPhucChe.Text = item.PhucChe;
+            }
+
+            textSbq.Focus();
+        }
+
+        private void NewDetail(object sender, EventArgs e)
+        {
+            Utilities.CloseForm(this, new NewDanhMucChiTiet(id));
+        }
+
+        private void AddNewBoSung(object sender, EventArgs e)
+        {
+            Utilities.CloseForm(this, new NewDanhMucBoSung(id, true));
+        }
+        
+    }
+}
