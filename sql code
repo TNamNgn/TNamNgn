@@ -1,0 +1,84 @@
+lter table PhieuBanGiaoTaiLieu
+add NgayYeuCau datetime, NgayGiao datetime;
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[PhieuBanGia_TongTien] 
+AS
+BEGIN
+	select 		
+		[Master].[Id],
+		[Master].[NgayThang],
+		[Master].[NguoiNhan],
+		[Master].[ChucDanh],
+		[Master].[DonVi],
+		[Master].[CMT],
+		[Master].[DiaChi],
+		[Master].[ThongTinChiTiet],
+		[Master].[HinhThucThanhToan],
+		[Master].[NguoiGiao],
+		[Master].[TPLTDC],
+		[Master].[GiamDoc],
+		[Master].[DienThoai],
+		[Master].[Nam],
+		[Master].[SoPhieu],
+		[Master].[NgayYeuCau],
+		[Master].[NgayGiao],
+		cast (Detail.ThanhTien as decimal(18,0)) as ThanhTien,
+		[Master].[AttachmentId]
+	from PhieuBanGiaoTaiLieu [Master]
+	left join 
+	(
+		select PhieuBanGiaoId as id, sum(ThanhTien) as ThanhTien
+		from PhieuBanGiaoTaiLieuChiTiet
+		group by PhieuBanGiaoId 
+	) Detail
+	on [Master].id = Detail.id	
+End
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[PhieuBanGia_TongTienByYear] 
+(	
+    @Nam int  = null
+)
+AS
+BEGIN
+	select 		
+		[Master].[Id],
+		[Master].[NgayThang],
+		[Master].[NguoiNhan],
+		[Master].[ChucDanh],
+		[Master].[DonVi],
+		[Master].[CMT],
+		[Master].[DiaChi],
+		[Master].[ThongTinChiTiet],
+		[Master].[HinhThucThanhToan],
+		[Master].[NguoiGiao],
+		[Master].[TPLTDC],
+		[Master].[GiamDoc],
+		[Master].[DienThoai],
+		[Master].[Nam],
+		[Master].[SoPhieu],
+		[Master].[NgayYeuCau],
+		[Master].[NgayGiao],
+		cast (Detail.ThanhTien as decimal(18,0)) as ThanhTien,
+		[Master].[AttachmentId]
+	from PhieuBanGiaoTaiLieu [Master]
+	left join 
+	(
+		select PhieuBanGiaoId as id, sum(ThanhTien) as ThanhTien
+		from PhieuBanGiaoTaiLieuChiTiet
+		group by PhieuBanGiaoId 
+	) Detail
+	on [Master].id = Detail.id	
+	where [Master].Nam = @Nam
+	
+End
+GO
+Alter table attachment
+add PhieuId int
