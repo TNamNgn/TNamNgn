@@ -1,0 +1,129 @@
+<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="Default.aspx.vb" Inherits="OneGeologyWeb._Default" %>
+<%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="cc1" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+      <link href="~/Site.css" rel="stylesheet" type="text/css" />
+ <style type="text/css">  
+        .accordion {  
+            width: 800px;  
+        }  
+          
+        .accordionHeader {  
+            border: 1px solid #2F4F4F;  
+            color: white;  
+            background-color: #2E4d7B;  
+            font-family: Arial, Sans-Serif;  
+            font-size: 12px;  
+            font-weight: bold;  
+            padding: 5px;  
+            margin-top: 5px;  
+            cursor: pointer;  
+        }  
+          
+        .accordionHeaderSelected {  
+            border: 1px solid #2F4F4F;  
+            color: white;  
+            background-color: #5078B3;  
+            font-family: Arial, Sans-Serif;  
+            font-size: 12px;  
+            font-weight: bold;  
+            padding: 5px;  
+            margin-top: 5px;  
+            cursor: pointer;  
+        }  
+          
+        .accordionContent {  
+            background-color: #D3DEEF;  
+            border: 1px dashed #2F4F4F;  
+            border-top: none;  
+            padding: 5px;  
+            padding-top: 10px;  
+            
+        }  
+    </style>  
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="page">
+     <div class ="Header">
+       <div class="title">
+                <h1 align="center" style="vertical-align: middle">
+                    <asp:Image ID="Image1" runat="server" ImageUrl="~/Ciaglogo.jpg" /> ONE GEOLOGY OF VIETNAM
+                </h1>
+            </div>
+     </div>
+
+       <div class="main">
+              <div>
+    
+        <br />
+        <br />
+        <br />
+                  <div aria-label="Nội dung thư" class="msg-body inner  undoreset" role="main" 
+                      style="">
+                      <div id="yiv506058785">
+                          <div>
+                              <div style="color:#000;background-color:#fff;font-family:times new roman, new york, times, serif;font-size:12pt;">
+                                  <div>
+                                      <div class="yiv506058785Vanbanthan">
+                                          <i><span lang="FR" style="background-color: #00FF00; text-align: center;">
+                                          <br />
+                                          <br />
+                                          Chương trình “Một địa chất Quốc tế (International OneGeology)&quot;<br />
+                                          <br />
+                                          </span></i>
+                                      </div>
+                                      <div class="yiv506058785Vanbanthan">
+                                          <span lang="FR">&nbsp;Lần đầu tiên ý tưởng thành lập OneGeology được đưa ra vào năm 
+                                          2006 và đến nay, đã có gần 100 quốc gia đăng ký tham gia cùng OneGeology, trong 
+                                          đó có Việt Nam (đại diện là Tổng cục Địa chất và Khoáng sản Việt Nam). Chương 
+                                          trình này do IUGS, UNESCO và sáu tổ chức quốc tế khác đề xuất, là dự án tiên 
+                                          phong trong chương trình Năm Quốc tế về Hành tinh Trái Đất của Liên Hợp Quốc. 
+                                          Mục đích của chương trình là đưa những bản đồ địa chất của các nước lên mạng 
+                                          Internet và cung cấp miễn phí cho mọi người quan tâm. Khoảng 15.000 nhà khoa học 
+                                          từ 87 quốc gia đã làm việc cùng nhau để tạo ra bản đồ địa chất kỹ thuật số đầu 
+                                          tiên của thế giới. </span>
+                                      </div>
+                                      <div class="yiv506058785Vanbanthan">
+                                          <span lang="FR">Chương trình &quot;Một Địa chất Quốc tế (International One Geology)” 
+                                          bao gồm cả mạng lưới các Tổ chức địa chất quốc gia trên thế giới tham gia thành 
+                                          lập bản đồ địa chất tỷ lệ 1:1.000.000 của mỗi nước. Tổ chức quốc tế là Ủy ban 
+                                          Bản đồ Địa chất Thế giới (CGMW), Liên hiệp Quốc tế các Khoa học Địa chất (IUGS), 
+                                          Tổ chức Liên hiệp quốc về Khoa học Gáo dục và Văn hóa (UNESCO), “ Năm Quốc tế về 
+                                          Hành tinh Trái đất” (IYPE) và Ban điều hành Quốc tế về Bản đồ Toàn cầu (ISCGM). 
+                                          Bản đồ địa chất tỷ lệ 1:1.000.000 của các nước thành viên CCOP như Indonexia, 
+                                          Nhật Bản, Hàn Quốc, Thái Lan… cũng đã được đóng góp.</span></div>
+                                      <div class="yiv506058785Vanbanthan">
+                                          <span lang="FR">Dữ liệu của OneGeology sẽ được lưu trữ trên 50 máy chủ tại nhiều 
+                                          nước và sẽ được cập nhật liên tục. Một khi hoàn thành, bản đồ sẽ được đưa lên 
+                                          mạng Internet để tất cả mọi người sử dụng mạng thông tin này có thể truy cập. 
+                                          One Geology có tính mở như Wikipedia nên cần phải thẩm định giá trị của dữ liệu 
+                                          địa chất được cung cấp. Vì vậy, trước mắt OneGeology chỉ mới chấp nhận thông 
+                                          tin, dữ liệu từ những tổ chức địa chất chính thống của các quốc gia.</span></div>
+                                      <div class="yiv506058785Vanbanthan">
+                                          <span lang="FR">Như vậy yêu cầu của OneGeology là cần có bản đồ số để tích hợp 
+                                          vào chương trình, đương nhiên bản đồ số này phải phù hợp với chuẩn quốc tế về 
+                                          chuyên môn cũng như công nghệ. Chuẩn chuyên môn là theo tiêu chuẩn của Ủy ban 
+                                          Bản đồ địa chất Thế giới, chuẩn công nghệ là chuẩn dịch vụ bản đồ web (Web Map 
+                                          Services – WMS)</span></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <br />
+                  <br />
+                  <br />
+                  <asp:Button ID="Button1" runat="server" PostBackUrl="~/mapapp/map.aspx" 
+                      Text="One Geology Map" Width="724px" />
+    
+    </div>
+        </div>
+
+</div>  
+    </form>
+</body>
+</html>
