@@ -1,0 +1,234 @@
+using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using Telerik.Charting;
+using Libs.Cms;
+using Libs.Cms.Manager;
+using System.Collections.Generic;
+using System.IO;
+namespace AddIns.Enviroment.Manager
+{
+    public partial class Chart : System.Web.UI.UserControl
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {               
+                Chart_City();
+                click_one_01.Attributes.Add("class", "QuanLyONhiem");
+            }
+        }
+        public void Chart_City()
+        {
+            radChart.Series.Clear();
+            Libs.Cms.M_Enviroment Emviroment = new M_Enviroment();
+            Double c1 = 0;
+            Double c2 = 0;
+            Double c3 = 0;
+            Double c4 = 0;
+            Double c5 = 0;
+            List<Libs.Cms.Info.Enviroment> o_Enviroments = Emviroment.Enviroments_List_City(cbo_Cty.SelectedItem.Text.Trim(), Convert.ToInt32(cbo_HienTrang.SelectedValue));
+            foreach (Libs.Cms.Info.Enviroment its in o_Enviroments)
+            {
+                if (its.Hangmuc == 1)
+                {
+                    c1 = c1 + 1;
+                }
+                else if (its.Hangmuc == 2)
+                {
+                    c2 = c2 + 1;
+                }
+                else if (its.Hangmuc == 3)
+                {
+                    c3 = c3 + 1;
+                }
+                else if (its.Hangmuc == 4)
+                {
+                    c4 = c4 + 1;
+                }
+                else
+                {
+                    c5 = c5 + 1;
+                }
+            }
+            radChart.ChartTitle.TextBlock.Text ="Tỉnh/TP: "+ cbo_Cty.SelectedItem.Text.ToUpper() ;
+            radChart.ChartTitle.TextBlock.Appearance.TextProperties.Font = new System.Drawing.Font("Verdana", 9, System.Drawing.FontStyle.Bold);
+            radChart.PlotArea.XAxis.AutoScale = false;
+            radChart.PlotArea.XAxis.AddRange(0, 4, 1);
+            radChart.PlotArea.XAxis[0].TextBlock.Text = "CSSX";
+            radChart.PlotArea.XAxis[1].TextBlock.Text = "BTLCR";
+            radChart.PlotArea.XAxis[2].TextBlock.Text = "KVLTCT";
+            radChart.PlotArea.XAxis[3].TextBlock.Text = "KHC";
+            radChart.PlotArea.XAxis[4].TextBlock.Text = "KTKS";
+            radChart.PlotArea.XAxis.IsZeroBased = false;
+
+            radChart.PlotArea.YAxis.AxisMode = ChartYAxisMode.Extended;            
+            radChart.PlotArea.YAxis.Appearance.Width = 1;
+         
+            ChartSeries chartSeries = new ChartSeries(cbo_HienTrang.SelectedItem.Text, ChartSeriesType.Bar);
+
+            Telerik.Charting.ChartSeries chItem = new Telerik.Charting.ChartSeries();
+            chItem = radChart.CreateSeries("Y: Số điểm ô nhiễm", System.Drawing.Color.White, System.Drawing.Color.Black, Telerik.Charting.ChartSeriesType.Spline);
+            radChart.PlotArea.YAxis.Appearance.TextAppearance.Visible = true;
+            chItem = radChart.CreateSeries("X: Thứ tự loại hình", System.Drawing.Color.White, System.Drawing.Color.Black, Telerik.Charting.ChartSeriesType.Spline);
+
+            chartSeries.Appearance.TextAppearance.TextProperties.Font = new System.Drawing.Font("Verdana", 9, System.Drawing.FontStyle.Bold);
+            chartSeries.Appearance.FillStyle.MainColor = System.Drawing.Color.Honeydew;
+            chartSeries.Appearance.FillStyle.SecondColor = System.Drawing.Color.Green;
+          
+            chartSeries.AddItem(c1);
+            chartSeries.AddItem(c2);
+            chartSeries.AddItem(c3);
+            chartSeries.AddItem(c4);
+            chartSeries.AddItem(c5);
+
+
+            radChart.Series.Add(chartSeries);  
+              
+        }       
+       
+        protected void cbo_Cty_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Chart_City();
+            id_show_01.Attributes.CssStyle.Add("display", "block");
+            id_show_02.Attributes.CssStyle.Add("display", "none");
+            click_one_01.Attributes.Add("class", "QuanLyONhiem");
+            click_one_02.Attributes.Add("class", "");
+        }
+
+        protected void cbo_HienTrang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Chart_City();
+            id_show_01.Attributes.CssStyle.Add("display", "block");
+            id_show_02.Attributes.CssStyle.Add("display", "none");
+            click_one_01.Attributes.Add("class", "QuanLyONhiem");
+            click_one_02.Attributes.Add("class", "");
+        }
+
+        protected void cmd_view_chart_Click(object sender, EventArgs e)
+        {
+            id_show_02.Attributes.CssStyle.Add("display", "block");
+            id_show_01.Attributes.CssStyle.Add("display", "none");
+            click_one_02.Attributes.Add("class", "QuanLyONhiem");
+            click_one_01.Attributes.Add("class", "");
+            radchar_second.Series.Clear();
+            radchar_second.ChartTitle.TextBlock.Text = "Loại hình so sánh: " + Drop_Loaihinh.SelectedItem.Text.ToUpper();
+            radchar_second.ChartTitle.TextBlock.Appearance.TextProperties.Font = new System.Drawing.Font("Verdana", 9, System.Drawing.FontStyle.Bold);
+            radchar_second.PlotArea.XAxis.AutoScale = false;
+            radchar_second.PlotArea.XAxis.AddRange(0, 4, 1);
+            String vssosann = "";
+            int iss = 0;
+            foreach(ListItem otes in Check_List_Province.Items)
+            {
+                if ((otes.Selected == true) && (iss <= 4))
+                {
+                    if (vssosann != "")
+                    {
+                        vssosann = vssosann + ",N'" + otes.Text.Trim() + "'";
+                    }
+                    else
+                    {
+                        vssosann = "N'" + otes.Text.Trim() + "'";
+                    }
+                    radchar_second.PlotArea.XAxis[iss].TextBlock.Text = otes.Text.Trim();
+                    iss++;
+                }                
+            }
+            radchar_second.PlotArea.XAxis.IsZeroBased = false;
+
+            radchar_second.PlotArea.YAxis.AxisMode = ChartYAxisMode.Extended;
+            radchar_second.PlotArea.YAxis.Appearance.Width = 1;
+
+            ChartSeries chartSeries = new ChartSeries(drop_hientrangfor.SelectedItem.Text, ChartSeriesType.Bar);
+
+            Telerik.Charting.ChartSeries chItem = new Telerik.Charting.ChartSeries();
+            chItem = radchar_second.CreateSeries("Y: Số điểm ô nhiễm", System.Drawing.Color.White, System.Drawing.Color.Black, Telerik.Charting.ChartSeriesType.Spline);
+            radchar_second.PlotArea.YAxis.Appearance.TextAppearance.Visible = true;
+            chItem = radchar_second.CreateSeries("X: Thứ tự tỉnh/TP", System.Drawing.Color.White, System.Drawing.Color.Black, Telerik.Charting.ChartSeriesType.Spline);
+
+            chartSeries.Appearance.TextAppearance.TextProperties.Font = new System.Drawing.Font("Verdana", 9, System.Drawing.FontStyle.Bold);
+            chartSeries.Appearance.FillStyle.MainColor = System.Drawing.Color.Honeydew;
+            chartSeries.Appearance.FillStyle.SecondColor = System.Drawing.Color.Green;
+            if (vssosann != "")
+            {
+                Libs.Cms.M_Enviroment Emviroment = new M_Enviroment();
+                List<Libs.Cms.Info.Enviroment> o_Enviroments;
+                if (drop_hientrangfor.SelectedValue != "4")
+                {
+                   o_Enviroments = Emviroment.Enviroments_Get_N_Province(vssosann, Convert.ToInt32(drop_hientrangfor.SelectedValue), Convert.ToInt32(Drop_Loaihinh.SelectedValue));
+                }
+                else
+                {
+                    o_Enviroments = Emviroment.Enviroments_Get_N_Province_All(vssosann,Convert.ToInt32(Drop_Loaihinh.SelectedValue));
+                }
+                String[] listsec = vssosann.Split(',');
+                Double luongs = 0;
+                foreach (String itss in listsec)
+                {
+                    luongs = 0;
+                    foreach (Libs.Cms.Info.Enviroment its in o_Enviroments)
+                    {
+                        if (itss == "N'" + its.Tinh_thanhpho.Trim() + "'")
+                        {
+                            luongs += 1;
+                        }
+                    }
+                    chartSeries.AddItem(luongs);
+                }
+                radchar_second.Series.Add(chartSeries);
+            }
+        }
+
+        protected void cmd_exportsecond_Click(object sender, EventArgs e)
+        {
+            FileInfo TheFile = new FileInfo(MapPath("/Chart/Charts_ONTLS_" + Check_List_Province.SelectedValue + "_" + drop_hientrangfor.SelectedValue + "_" + Drop_Loaihinh.SelectedValue + ".png"));
+            if (TheFile.Exists)
+            {
+                File.Delete(MapPath("/Chart/Charts_ONTLS_" + Check_List_Province.SelectedValue + "_" + drop_hientrangfor.SelectedValue + "_" + Drop_Loaihinh.SelectedValue + ".png"));
+            }
+            radchar_second.Save(Server.MapPath(@"~/Chart/Charts_ONTLS_" + Check_List_Province.SelectedValue + "_" + drop_hientrangfor.SelectedValue + "_" + Drop_Loaihinh.SelectedValue + ".png"), System.Drawing.Imaging.ImageFormat.Png);
+            Literal inoffices = new Literal();
+            inoffices.Text = "<table border='0' cellpadding='0px' cellspacing='0px'><tr> <td>  <img alt='' src='http://" + Request.Url.Authority.ToString().ToLower() +"/Chart/Charts_ONTLS_" + Check_List_Province.SelectedValue + "_" + drop_hientrangfor.SelectedValue + "_" + Drop_Loaihinh.SelectedValue + ".png' /> </td> </tr></table>";
+            Response.Clear();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment;filename=Charts.doc");
+            Response.Charset = "";
+            Response.ContentType = "application/vnd.ms-word ";
+            System.IO.StringWriter sw = new System.IO.StringWriter();
+            HtmlTextWriter hw = new HtmlTextWriter(sw);
+            inoffices.RenderControl(hw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();   
+        }
+        protected void cmd_word_Click(object sender, EventArgs e)
+        {
+            FileInfo TheFile = new FileInfo(MapPath("/Chart/Charts_ONTL_" + cbo_Cty.SelectedValue + "_" + cbo_HienTrang.SelectedValue + ".png"));
+            if (TheFile.Exists)
+            {
+                File.Delete(MapPath("/Chart/Charts_ONTL_" + cbo_Cty.SelectedValue + "_" + cbo_HienTrang.SelectedValue + ".png"));
+            }
+            radChart.Save(Server.MapPath(@"~/Chart/Charts_ONTL_" + cbo_Cty.SelectedValue + "_" + cbo_HienTrang.SelectedValue + ".png"), System.Drawing.Imaging.ImageFormat.Png);
+            Literal inoffices = new Literal();
+            inoffices.Text = "<table border='0' cellpadding='0px' cellspacing='0px'><tr> <td>  <img alt='' src='http://" + Request.Url.Authority.ToString().ToLower() +"/Chart/Charts_ONTL_" + cbo_Cty.SelectedValue + "_" + cbo_HienTrang.SelectedValue + ".png' /> </td> </tr></table>";
+            Response.Clear();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment;filename=Chart.doc");
+            Response.Charset = "";
+            Response.ContentType = "application/vnd.ms-word ";
+            System.IO.StringWriter sw = new System.IO.StringWriter();
+            HtmlTextWriter hw = new HtmlTextWriter(sw);
+            inoffices.RenderControl(hw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();    
+        }
+    }
+}
