@@ -1,0 +1,172 @@
+
+@startuml
+' I. Hồ sơ cấp phép thăm dò
+together {
+entity "tbl_gptd" {
+  * ma_gptd : NUMBER(10,0) PK
+  --
+  so_gptd : NVARCHAR2(50)
+  ma_doncptd : NUMBER(10,0) FK
+  ngay_cap : DATE
+  ma_donvi : NUMBER(10,0) FK
+  nguoi_ky : NVARCHAR2(50)
+  chuc_danh : NVARCHAR2(50)
+  ma_dn : NVARCHAR2(254) FK
+  ma_ks : NUMBER(10,0) FK
+  ma_mo : NUMBER(10,0) FK
+  vitri_hc : NVARCHAR2(254)
+  ma_xa : NUMBER(10,0) FK
+  ma_huyen : NUMBER(10,0) FK
+  ma_tinh : NUMBER(10,0) FK
+  dien_tich : NUMBER(10,2)
+  ma_dvdt : NUMBER(10,0) FK
+  mucsautd_tu : NVARCHAR2(50)
+  mucsautd_den : NVARCHAR2(50)
+  thoihan_td : NVARCHAR2(50)
+  thoigian_hh : DATE
+  chiphi_td : NVARCHAR2(254)
+  nguon_von : NVARCHAR2(50)
+  file_gptd : BLOB
+}
+
+entity "tbl_kvtd" {
+  * ma_bdkvcptd : NUMBER(10,0) PK
+  --
+  ma_gptd : NUMBER(10,0) FK
+  ma_ks : NUMBER(10,0) FK
+  ten_mo : NVARCHAR2(254)
+  vitri_hc : NVARCHAR2(254)
+  dientich : NUMBER(10,2)
+  ma_dvdt : NUMBER(10,0) FK
+  mucsautd_tu : NVARCHAR2(50)
+  mucsautd_den : NVARCHAR2(50)
+  thoihan_td : NVARCHAR2(50)
+  ma_hetoado : NUMBER(10,0) FK
+  ma_tyle : NUMBER(10,0) FK
+  nguoitl : NVARCHAR2(50)
+  ma_donvi : NUMBER(10,0) FK
+  ma_danhphap : NUMBER(10,0) FK
+  ma_tyle_bando : NUMBER(10,0) FK
+  file_bando : BLOB
+}
+
+entity "tbl_tdkvtd" {
+  * ma_toado : NUMBER(10,0) PK
+  --
+  ma_gptd : NUMBER(10,0) FK
+  ma_bdkvcptd : NUMBER(10,0) FK
+  diem_goc : NVARCHAR2(50)
+  toado_X : NUMBER(10,2)
+  toado_Y : NUMBER(10,2)
+}
+
+entity "tbl_vbpltd" {
+  * ma_vbplcptd : NUMBER(10,0) PK
+  --
+  ma_gptd : NUMBER(10,0) FK
+  loai_vbpl : NUMBER(10,0) FK
+  so_vb : NVARCHAR2(50)
+  ngay_vb : DATE
+  trich_yeu : NVARCHAR2(254)
+  cap_bh : NVARCHAR2(254)
+  nguoi_duyet : NVARCHAR2(50)
+  chuc_vu : NVARCHAR2(254)
+  file_vb : BLOB
+}
+}
+together {
+entity "tbl_dondntd" {
+  * ma_doncptd : NUMBER(10,0) PK
+  --
+  ma_dn : NUMBER(10,0) FK
+  ma_ks : NUMBER(10,0) FK
+  vitri_td : NVARCHAR2(254)
+  ma_xa : NUMBER(10,0) FK
+  ma_huyen : NUMBER(10,0) FK
+  ma_tinh : NUMBER(10,0) FK
+  dien_tich : NUMBER(10,2)
+  ma_donvi : NUMBER(10,0) FK
+  chieusau_td_tu : NUMBER(10,2)
+  chieusau_td_den : NUMBER(10,2)
+  thoihan_td : NVARCHAR2(50)
+  ma_dvtinh : NUMBER(10,0) FK
+  mucdich_sd : NVARCHAR2(254)
+  ma_donvi_lap : NUMBER(10,0) FK
+  file_don : BLOB
+}
+
+entity "tbl_cttdnk" {
+  * ma_ctcptd : NUMBER(10,0) PK
+  --
+  ma_doncptd : NUMBER(10,0) FK
+  sohieu_gk : NVARCHAR2(50)
+  chieu_sau : NUMBER(10,2)
+  toado_X : NUMBER(10,2)
+  toado_Y : NUMBER(10,2)
+  ghi_chu : NVARCHAR2(254)
+}
+
+entity "tbl_deantd" {
+  * ma_deantd : NUMBER(10,0) PK
+  --
+  ma_doncptd : NUMBER(10,0) FK
+  ten_deantd : NVARCHAR2(254)
+  ma_mo : NUMBER(10,0) FK
+  ma_ks : NUMBER(10,0) FK
+  chu_nhiem_da : NVARCHAR2(50)
+  ma_donvi : NUMBER(10,0) FK
+  nam_tl : NVARCHAR2(50)
+  file_vbpl : BLOB
+}
+
+entity "tbl_kvtddon" {
+  * ma_bvcpdon : NUMBER(10,0) PK
+  --
+  ma_doncptd : NUMBER(10,0) FK
+  so_hieu_bv : NVARCHAR2(50)
+  ten_bv : NVARCHAR2(254)
+  ma_mo : NUMBER(10,0) FK
+  ma_ks : NUMBER(10,0) FK
+  ma_tyle : NUMBER(10,0) FK
+  ma_danhphap : NUMBER(10,0) FK
+  ma_hetoado : NUMBER(10,0) FK
+  nguoi_tl : NVARCHAR2(50)
+  ma_donvi : NVARCHAR2(50)
+  nam_tl : NUMBER(10,0)
+  file_bando : BLOB
+}
+
+entity "tbl_tdkvtddon" {
+  * ma_toadodoncp : NUMBER(10,0) PK
+  --
+  ma_doncptd : NUMBER(10,0) FK
+  ma_bvcpdon : NUMBER(10,0) FK
+  diem_goc : NVARCHAR2(50)
+  toado_X : NUMBER(10,2)
+  toado_Y : NUMBER(10,2)
+}
+
+entity "tbl_vbpldon" {
+  * ma_vbpl : NUMBER(10,0) PK
+  --
+  ma_doncptd : NUMBER(10,0) FK
+  loai_vbpl : NUMBER(10,0) FK
+  ten_vbpl : NVARCHAR2(254)
+  file_vbpl : BLOB
+}
+}
+' Relationships
+tbl_gptd ||--o{ tbl_kvtd : 1-n
+tbl_gptd ||--o{ tbl_tdkvtd : 1-n
+tbl_gptd ||--o{ tbl_vbpltd : 1-n
+tbl_dondntd ||--o{ tbl_gptd : 1-1
+tbl_dondntd ||--o{ tbl_cttdnk : 1-n
+tbl_dondntd ||--o{ tbl_deantd : 1-n
+tbl_dondntd ||--o{ tbl_tdkvtddon : 1-n
+tbl_dondntd ||--o{ tbl_vbpldon : 1-n
+tbl_kvtddon ||--o{ tbl_tdkvtddon : 1-n
+tbl_kvtd ||--o{ tbl_tdkvtd : 1-n
+
+@enduml
+```
+
