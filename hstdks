@@ -1,0 +1,136 @@
+@startuml
+
+left to right direction
+class "tbl_gptd" as tbl_gptd {
+  +ma_gptd: VARCHAR2(100) [primary key]
+  +ma_vbcptd: VARCHAR2(100) [foreign key]
+  +so_gptd: VARCHAR2(50)
+  +ngay_cap: DATE (10)
+  +ma_donvi: VARCHAR2(100) [foreign key]
+  +nguoi_ky: VARCHAR2(50)
+  +chuc_danh: VARCHAR2(50)
+  +ma_dn: VARCHAR2(100) [foreign key]
+  +ma_ks: VARCHAR2(100) [foreign key]
+  +ma_mo: VARCHAR2(100) [foreign key]
+  +vitri_hc: VARCHAR2(254)
+  +ma_xa: VARCHAR2(100) [foreign key]
+  +ma_huyen: VARCHAR2(100) [foreign key]
+  +ma_tinh: VARCHAR2(100) [foreign key]
+  +dien_tich: NUMBER(10,2)
+  +mucsautd_tu: VARCHAR2(50)
+  +mucsautd_den: VARCHAR2(50)
+  +mucsautd_tn: VARCHAR2(50)
+  +ppkl_td: VARCHAR2(254)
+  +thoihan_td: VARCHAR2(50)
+  +thoigian_hh: DATE (10)
+  +file_gptd: BLOB () 
+}
+tbl_gptd : <<Table>>
+' 1. Bảng giấy phép thăm dò khoáng sản gia hạn (tbl_gptdgh)
+class "tbl_gptdgh" as tbl_gptdgh {
+  +ma_gptdgh: VARCHAR2(100) [primary key]
+  +so_gptdgh: VARCHAR2(50)
+  +ma_gptd: VARCHAR2(100) [foreign key]
+  +ma_vbghtd: VARCHAR2(100) [foreign key]
+  +ngay_cap: DATE (10)
+  +ma_donvi: VARCHAR2(100) [foreign key]
+  +nguoi_ky: VARCHAR2(50)
+  +chuc_danh: VARCHAR2(50)
+  +ma_dn: VARCHAR2(100) [foreign key]
+  +ma_ks: VARCHAR2(100) [foreign key]
+  +ma_mo: VARCHAR2(100) [foreign key]
+  +vitri_hc: VARCHAR2(254)
+  +ma_xa: VARCHAR2(100) [foreign key]
+  +ma_huyen: VARCHAR2(100) [foreign key]
+  +ma_tinh: VARCHAR2(100) [foreign key]
+  +thoigian_gh: DATE (10)
+  +file_gptdgh: BLOB ()
+}
+tbl_gptdgh : <<Table>>
+
+' 2. Bảng văn bản pháp lý thẩm định hồ sơ gia hạn (tbl_vbplghtd)
+class "tbl_vbplghtd" as tbl_vbplghtd {
+  +ma_vbplghtd: VARCHAR2(100) [primary key]
+  +ma_gptdgh: VARCHAR2(100) [foreign key]
+  +loai_vbpl: VARCHAR2(50)
+  +so_vbpl: VARCHAR2(50)
+  +ngay_vbpl: DATE (10)
+  +trich_yeu: VARCHAR2(254)
+  +cap_bh: VARCHAR2(50)
+  +nguoi_duyet: VARCHAR2(50)
+  +chuc_vu: VARCHAR2(50)
+  +node_chidao: VARCHAR2(50)
+  +file_node: BLOB ()
+  +file_vbpl: BLOB ()
+}
+tbl_vbplghtd : <<Table>>
+
+' 3. Bảng văn bản đề nghị gia hạn giấy phép thăm dò (tbl_vbghtd)
+class "tbl_vbghtd" as tbl_vbghtd {
+  +ma_vbghtd: VARCHAR2(100) [primary key]
+  +ma_gptd: VARCHAR2(100) [foreign key]
+  +ma_dn: VARCHAR2(100) [foreign key]
+  +ma_ks: VARCHAR2(100) [foreign key]
+  +ma_mo: VARCHAR2(100) [foreign key]
+  +vitri_td: VARCHAR2(254)
+  +thoigian_gh: DATE (10)
+  +lydo_gh: VARCHAR2(254)
+  +file_don: BLOB ()
+}
+tbl_vbghtd : <<Table>>
+
+' 4. Bảng văn bản pháp lý kèm theo văn bản đề nghị gia hạn (tbl_vbplvbgh)
+class "tbl_vbplvbgh" as tbl_vbplvbgh {
+  +ma_vbplvbgh: VARCHAR2(100) [primary key]
+  +ma_vbghtd: VARCHAR2(100) [foreign key]
+  +loai_vbpl: VARCHAR2(50)
+  +so_vb: VARCHAR2(50)
+  +ngay_vb: DATE (10)
+  +ten_vbpl: VARCHAR2(254)
+  +node_chidao: VARCHAR2(50)
+  +file_node: BLOB ()
+  +file_vbpl: BLOB ()
+}
+tbl_vbplvbgh : <<Table>>
+
+' 5. Bảng hồ sơ kỹ thuật gia hạn thăm dò (tbl_hsktghtd)
+class "tbl_hsktghtd" as tbl_hsktghtd {
+  +ma_hsktghtd: VARCHAR2(100) [primary key]
+  +ma_vbghtd: VARCHAR2(100) [foreign key]
+  +loai_hs: VARCHAR2(254)
+  +ten_hs: VARCHAR2(254)
+  +ma_mo: VARCHAR2(100) [foreign key]
+  +ma_ks: VARCHAR2(100) [foreign key]
+  +chu_bien: VARCHAR2(50)
+  +ma_donvi: VARCHAR2(100) [foreign key]
+  +nam_tl: NUMBER(10)
+  +file_hskt: BLOB ()
+}
+tbl_hsktghtd : <<Table>>
+
+' 6. Bảng bản vẽ kỹ thuật gia hạn thăm dò (tbl_bvktghtd)
+class "tbl_bvktghtd" as tbl_bvktghtd {
+  +ma_bvktghtd: VARCHAR2(100) [primary key]
+  +ma_vbghtd: VARCHAR2(100) [foreign key]
+  +sohieu_bv: VARCHAR2(254)
+  +ten_bv: VARCHAR2(50)
+  +ma_hetoado: VARCHAR2(100) [foreign key]
+  +ma_tyle: VARCHAR2(100) [foreign key]
+  +nguoi_tl: VARCHAR2(50)
+  +ma_donvi: VARCHAR2(100) [foreign key]
+  +nam_tl: NUMBER(10)
+  +node_chidao: VARCHAR2(50)
+  +file_node: BLOB ()
+  +file_vb: BLOB ()
+}
+tbl_bvktghtd : <<Table>>
+
+' Các mối quan hệ giữa các bảng chính
+tbl_gptdgh "1..*" --> "1" tbl_gptd : ma_gptd
+tbl_gptdgh "1" --> "1" tbl_vbghtd : ma_vbghtd
+tbl_vbplghtd "1..*" --> "1" tbl_gptdgh : ma_gptdgh
+tbl_vbplvbgh "1..*" --> "1" tbl_vbghtd : ma_vbghtd
+tbl_hsktghtd "1..*" --> "1" tbl_vbghtd : ma_vbghtd
+tbl_bvktghtd "1..*" --> "1" tbl_vbghtd : ma_vbghtd
+
+@enduml
