@@ -1,0 +1,247 @@
+# -*- coding: utf-8 -*-
+"""
+Tạo các vùng (polygon) tự động từ các điểm trong file Excel
+Phù hợp với ArcGIS Desktop 10.8
+Hệ tọa độ: VN2000 kinh tuyến trục 105 múi chiếu 6 độ (EPSG:3405)
+"""
+
+import arcpy
+import pandas as pd
+import os
+from collections import defaultdict
+
+def create_polygons_from_excel(excel_path, output_workspace, output_feature_class):
+    """
+    Tạo polygon từ file Excel chứa các điểm
+    
+    Parameters:
+    excel_path: đường dẫn đến file Excel
+    output_workspace: workspace đầu ra
+    output_feature_class: tên feature class đầu ra
+    """
+    
+    try:
+        # Đặt workspace
+        arcpy.env.workspace = output_workspace
+        arcpy.env.overwriteOutput = True
+        
+        # Đọc dữ liệu từ Excel
+        print("Đang đọc dữ liệu từ file Excel...")
+        df = pd.read_excel(excel_path)
+        
+        # Kiểm tra các cột cần thiết
+        required_columns = ['KhuVuc', 'ThuTu', 'TenDiem', 'ToaDoX', 'ToaDoY']
+        for col in required_columns:
+            if col not in df.columns:
+                raise ValueError("Không tìm thấy cột '{0}' trong file Excel".format(col))
+        
+        # Tạo hệ tọa độ VN2000 kinh tuyến trục 105 múi chiếu 6 độ
+        spatial_ref = arcpy.SpatialReference(3405)  # EPSG:3405
+        
+        # Tạo feature class đầu ra
+        output_path = os.path.join(output_workspace, output_feature_class)
+        arcpy.CreateFeatureclass_management(
+            output_workspace, 
+            output_feature_class, 
+            "POLYGON", 
+            spatial_reference=spatial_ref
+        )
+        
+        # Thêm các trường thông tin
+        arcpy.AddField_management(output_path, "KhuVuc", "TEXT", field_length=50)
+        arcpy.AddField_management(output_path, "SoDiem", "LONG")
+        arcpy.AddField_management(output_path, "DienTich", "DOUBLE")
+        arcpy.AddField_management(output_path, "ChuVi", "DOUBLE")
+        
+        # Nhóm dữ liệu theo khu vực
+        grouped_data = defaultdict(list)
+        for index, row in df.iterrows():
+            khu_vuc = row['KhuVuc']
+            thu_tu = int(row['ThuTu'])
+            x = float(row['ToaDoX'])
+            y = float(row['ToaDoY'])
+            ten_diem = row['TenDiem']
+            
+            grouped_data[khu_vuc].append((thu_tu, x, y, ten_diem))
+        
+        # Tạo cursor để thêm polygon
+        insert_cursor = arcpy.da.InsertCursor(
+            output_path, 
+            ["SHAPE@", "KhuVuc", "SoDiem", "DienTich", "ChuVi"]
+        )
+        
+        print("Đang tạo các polygon...")
+        
+        # Tạo polygon cho từng khu vực
+        for khu_vuc, points_data in grouped_data.items():
+            try:
+                # Sắp xếp các điểm theo thứ tự
+                points_data.sort(key=lambda x: x[0])
+                
+                # Tạo danh sách các điểm
+                point_list = []
+                for thu_tu, x, y, ten_diem in points_data:
+                    point_list.append(arcpy.Point(x, y))
+                    print("  Khu vực {0}: Điểm {1} - {2} ({3}, {4})".format(
+                        khu_vuc, thu_tu, ten_diem, x, y))
+                
+                # Đóng polygon bằng cách thêm điểm đầu vào cuối (nếu chưa đóng)
+                if len(point_list) > 2:
+                    first_point = point_list[0]
+                    last_point = point_list[-1]
+                    if not (first_point.X == last_point.X and first_point.Y == last_point.Y):
+                        point_list.append(arcpy.Point(first_point.X, first_point.Y))
+                
+                # Tạo polygon
+                if len(point_list) >= 4:  # Cần ít nhất 4 điểm để tạo polygon (bao gồm điểm đóng)
+                    polygon_array = arcpy.Array(point_list)
+                    polygon = arcpy.Polygon(polygon_array, spatial_ref)
+                    
+                    # Tính diện tích và chu vi
+                    dien_tich = polygon.area
+                    chu_vi = polygon.length
+                    so_diem = len(points_data)
+                    
+                    # Thêm vào feature class
+                    insert_cursor.insertRow([
+                        polygon, 
+                        str(khu_vuc), 
+                        so_diem, 
+                        dien_tich, 
+                        chu_vi
+                    ])
+                    
+                    print("  -> Tạo thành công polygon cho khu vực '{0}' với {1} điểm".format(
+                        khu_vuc, so_diem))
+                    print("     Diện tích: {0:.2f} m²".format(dien_tich))
+                    print("     Chu vi: {0:.2f} m".format(chu_vi))
+                    
+                else:
+                    print("  -> Cảnh báo: Khu vực '{0}' không đủ điểm để tạo polygon (cần ít nhất 3 điểm)".format(khu_vuc))
+                    
+            except Exception as e:
+                print("  -> Lỗi khi tạo polygon cho khu vực '{0}': {1}".format(khu_vuc, str(e)))
+                continue
+        
+        # Đóng cursor
+        del insert_cursor
+        
+        print("\nHoàn thành! Feature class '{0}' đã được tạo tại: {1}".format(
+            output_feature_class, output_path))
+        
+        # Tạo layer để hiển thị
+        layer_name = output_feature_class + "_Layer"
+        arcpy.MakeFeatureLayer_management(output_path, layer_name)
+        
+        return output_path
+        
+    except Exception as e:
+        print("Lỗi: {0}".format(str(e)))
+        return None
+
+def create_points_feature_class(excel_path, output_workspace, output_feature_class):
+    """
+    Tạo feature class điểm từ file Excel (tùy chọn)
+    """
+    try:
+        # Đọc dữ liệu từ Excel
+        df = pd.read_excel(excel_path)
+        
+        # Tạo hệ tọa độ VN2000
+        spatial_ref = arcpy.SpatialReference(3405)
+        
+        # Tạo feature class điểm
+        points_path = os.path.join(output_workspace, output_feature_class)
+        arcpy.CreateFeatureclass_management(
+            output_workspace, 
+            output_feature_class, 
+            "POINT", 
+            spatial_reference=spatial_ref
+        )
+        
+        # Thêm các trường
+        arcpy.AddField_management(points_path, "KhuVuc", "TEXT", field_length=50)
+        arcpy.AddField_management(points_path, "ThuTu", "LONG")
+        arcpy.AddField_management(points_path, "TenDiem", "TEXT", field_length=50)
+        arcpy.AddField_management(points_path, "ToaDoX", "DOUBLE")
+        arcpy.AddField_management(points_path, "ToaDoY", "DOUBLE")
+        
+        # Tạo cursor để thêm điểm
+        insert_cursor = arcpy.da.InsertCursor(
+            points_path, 
+            ["SHAPE@XY", "KhuVuc", "ThuTu", "TenDiem", "ToaDoX", "ToaDoY"]
+        )
+        
+        # Thêm các điểm
+        for index, row in df.iterrows():
+            x = float(row['ToaDoX'])
+            y = float(row['ToaDoY'])
+            point = (x, y)
+            
+            insert_cursor.insertRow([
+                point,
+                str(row['KhuVuc']),
+                int(row['ThuTu']),
+                str(row['TenDiem']),
+                x,
+                y
+            ])
+        
+        del insert_cursor
+        print("Feature class điểm '{0}' đã được tạo".format(output_feature_class))
+        
+        return points_path
+        
+    except Exception as e:
+        print("Lỗi khi tạo feature class điểm: {0}".format(str(e)))
+        return None
+
+# Hàm chính để chạy
+def main():
+    """
+    Hàm chính - cần thay đổi các đường dẫn phù hợp
+    """
+    
+    # ===== CẤU HÌNH - THAY ĐỔI THEO NHU CẦU =====
+    excel_file_path = r"C:\path\to\your\data.xlsx"  # Đường dẫn đến file Excel
+    output_workspace = r"C:\path\to\your\output.gdb"  # Geodatabase đầu ra
+    polygon_fc_name = "KhuVuc_Polygons"  # Tên feature class polygon
+    points_fc_name = "KhuVuc_Points"  # Tên feature class điểm (tùy chọn)
+    
+    # Tạo geodatabase nếu chưa có
+    workspace_dir = os.path.dirname(output_workspace)
+    gdb_name = os.path.basename(output_workspace)
+    
+    if not arcpy.Exists(output_workspace):
+        print("Tạo geodatabase mới...")
+        arcpy.CreateFileGDB_management(workspace_dir, gdb_name)
+    
+    print("Bắt đầu xử lý...")
+    print("File Excel: {0}".format(excel_file_path))
+    print("Output workspace: {0}".format(output_workspace))
+    
+    # Tạo polygon feature class
+    polygon_result = create_polygons_from_excel(
+        excel_file_path, 
+        output_workspace, 
+        polygon_fc_name
+    )
+    
+    # Tùy chọn: Tạo feature class điểm
+    create_points = True  # Đặt False nếu không muốn tạo điểm
+    if create_points:
+        points_result = create_points_feature_class(
+            excel_file_path,
+            output_workspace,
+            points_fc_name
+        )
+    
+    print("\n=== HOÀN THÀNH ===")
+    if polygon_result:
+        print("Polygon feature class: {0}".format(polygon_result))
+    if create_points and 'points_result' in locals():
+        print("Points feature class: {0}".format(points_result))
+
+# Chạy script
+if __name__ == "__main__":
+    main()
