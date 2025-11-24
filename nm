@@ -1,0 +1,35 @@
+
+import pyautogui
+import time
+
+# Chờ 5 giây để bạn mở ứng dụng hoặc form cần nhập liệu
+time.sleep(5)
+
+# Danh sách dữ liệu cần nhập
+data = ["Nguyễn Tiến", "Hà Nội", "0123456789", "email@example.com"]
+
+for item in data:
+    pyautogui.typewrite(item)  # Gõ dữ liệu
+    pyautogui.press('tab')     # Chuyển sang ô tiếp theo
+
+# Nhấn Enter để gửi form
+pyautogui.press('enter')
+
+import pandas as pd
+import pyautogui
+import time
+
+# Đọc dữ liệu từ Excel
+df = pd.read_excel("data.xlsx")
+
+time.sleep(5)  # Chờ mở form
+
+for index, row in df.iterrows():
+    pyautogui.typewrite(str(row['Tên']))
+    pyautogui.press('tab')
+    pyautogui.typewrite(str(row['Địa chỉ']))
+    pyautogui.press('tab')
+    pyautogui.typewrite(str(row['SĐT']))
+    pyautogui.press('tab')
+    pyautogui.typewrite(str(row['Email']))
+    pyautogui.press('enter')
